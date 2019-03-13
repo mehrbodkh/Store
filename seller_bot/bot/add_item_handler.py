@@ -98,8 +98,7 @@ def send_name_message(bot, update):
 
 
 def send_tag_message(bot, update):
-    categories_list = get_tags_list_from_db()
-    kb = [(cat[0]) for cat in categories_list]
+    kb = get_tags_list_from_db()
 
     bot.send_message(
         chat_id=update.message.chat_id,
@@ -122,4 +121,6 @@ def add_item_to_db(name, tag, price, inventory, photo, description):
 
 
 def get_tags_list_from_db():
-    return get_product_categories()
+    categories_list = get_product_categories()
+    keyboard = [(cat[0]) for cat in categories_list]
+    return keyboard
