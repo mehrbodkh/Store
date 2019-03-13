@@ -1,7 +1,8 @@
+from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
 
 from DB.db_handler import set_store_card_number
-from seller_bot.constants.seller_constants import ConversationStates, Messages
+from seller_bot.constants.seller_constants import ConversationStates, Messages, Keyboards
 
 
 def change_card_number_enter(bot, update, user_data):
@@ -32,7 +33,8 @@ def insert_card_number_to_db(card_number):
 def send_card_number_successfully_changed_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.change_store_card_success
+        text=Messages.change_store_card_success,
+        reply_markup=ReplyKeyboardMarkup(keyboard=[[Keyboards.return_to_main_menu]])
     )
     return ConversationHandler.END
 

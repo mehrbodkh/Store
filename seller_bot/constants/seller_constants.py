@@ -34,6 +34,7 @@ class Keyboards:
     remove_item = "حذف کردن محصول"
     show_all_items = "نمایش تمام محصولات"
     change_store_card_number = "تنظیم شماره کارت فروشگاه"
+    return_to_main_menu = "/start"
 
 
 class ConversationStates:
