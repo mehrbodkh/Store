@@ -39,6 +39,12 @@ def add_item_tag_callback(bot, update):
     if update.message.text not in keys:
         keys.append(update.message.text)
 
+    return send_inventory_message(bot, update)
+
+
+def add_item_inventory_callback(bot, update):
+    # todo add inventory to db
+
     bot.send_message(
         chat_id=update.message.chat_id,
         text=Messages.end_add_conversation
@@ -85,3 +91,11 @@ def send_tag_message(bot, update):
         reply_markup=ReplyKeyboardMarkup(keyboard=[tags_list])
     )
     return ConversationStates.TAG
+
+
+def send_inventory_message(bot, update):
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.add_item_inventory_tutorial
+    )
+    return ConversationStates.INVENTORY

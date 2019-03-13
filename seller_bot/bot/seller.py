@@ -65,6 +65,9 @@ add_item_conversation_handler = ConversationHandler(
         ],
         ConversationStates.TAG: [
             MessageHandler(filters=Filters.text, callback=add_item_tag_callback)
+        ],
+        ConversationStates.INVENTORY: [
+            MessageHandler(filters=Filters.text, callback=add_item_inventory_callback)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]
