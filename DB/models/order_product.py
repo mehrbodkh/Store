@@ -14,6 +14,7 @@ class OrderProduct(Base):
     count = Column(Integer)
     price_per_one = Column(Float)
 
-    def __init__(self, order_id, product_id):
+    def __init__(self, order_id, product_id, count):
         self.order_id = order_id
         self.product_id = product_id
+        self.count = count

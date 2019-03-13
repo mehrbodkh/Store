@@ -4,6 +4,9 @@ from sqlalchemy import distinct
 
 from DB.models.address import Address
 from DB.models.base import Session, Base, engine
+from DB.models.order import Order
+from DB.models.order_payment import OrderPayment
+from DB.models.order_product import OrderProduct
 from DB.models.product import Product
 from DB.models.store import Store
 from DB.models.user import User
@@ -98,6 +101,46 @@ def get_product_categories():
     categories = [category[0] for category in categories]
     result = []
     for category in categories:
-        product_amount = session.query(Product).filter(Product.category == category).count()
-        result.append((category, product_amount))
+        product_count = session.query(Product).filter(Product.category == category).count()
+        result.append((category, product_count))
     return result
+
+
+@db_persist
+def add_order(customer_chat_id, address_id, description):
+    order = Order(customer_chat_id, address_id, description)
+    session.add(order)
+
+
+def get_order_by_id(order_id):
+    return session.query(Order).filter(Order.id == order_id).one_or_none()
+
+
+def get_customer_orders(chat_id):
+    return session.query(Order).filter(Order.customer_chat_id == chat_id).all()
+
+
+def get_order_by_msg_uid(msg_uid):
+    return session.query(Order).filter(Order.invoice_msg_uid == msg_uid).one_or_none()
+
+
+@db_persist
+def add_order_product(order_id, product_id, count):
+    order_product = OrderProduct(order_id, product_id, count)
+    session.add(order_product)
+
+
+@db_persist
+def set_order_invoice(order_id, msg_uid):
+    order = get_order_by_id(order_id)
+    order.invoice_msg_uid = msg_uid
+
+
+@db_persist
+def add_payment(order_id, amount, msg_uid, traceNo):
+    order_payment = OrderPayment(order_id, amount, msg_uid, traceNo)
+    session.add(order_payment)
+
+
+def get_payment(order_id):
+    return session.query(OrderPayment).filter(OrderPayment.order_id == order_id).one_or_none()
