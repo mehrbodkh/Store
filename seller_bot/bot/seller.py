@@ -73,9 +73,29 @@ def add_item_photo_callback(bot, update):
 
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_photo_tutorial
+        text=Messages.add_item_description_tutorial
     )
     return ConversationStates.DESCRIPTION
+
+
+def add_item_description_callback(bot, update):
+    # todo add description to db
+
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.add_item_tag_tutorial
+    )
+    return ConversationStates.TAG
+
+
+def add_item_tag_callback(bot, update):
+    # todo add tag to db
+
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.add_item_tag_tutorial
+    )
+    return ConversationHandler.END
 
 
 def remove_callback(bot, update):
@@ -96,6 +116,9 @@ add_item_conversation_handler = ConversationHandler(
         ],
         ConversationStates.PHOTO: [
             MessageHandler(filters=Filters.photo, callback=add_item_photo_callback)
+        ],
+        ConversationStates.DESCRIPTION: [
+            MessageHandler(filters=Filters.text, callback=add_item_description_callback)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]
