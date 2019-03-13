@@ -20,6 +20,7 @@ class Messages:
 class Keyboards:
     add_item = "افزودن محصول"
     remove_item = "حذف کردن محصول"
+    show_all_items = "نمایش تمام محصولات"
 
 
 class ConversationStates:
