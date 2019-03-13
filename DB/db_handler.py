@@ -144,3 +144,8 @@ def add_payment(order_id, amount, msg_uid, traceNo):
 
 def get_payment(order_id):
     return session.query(Payment).filter(Payment.order_id == order_id).one_or_none()
+
+
+def get_customer_current_order(customer_chat_id):
+    return session.query(Order).filter(Order.invoice_msg_uid.is_(None),
+                                       Order.customer_chat_id == customer_chat_id).one_or_none()

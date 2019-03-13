@@ -59,7 +59,7 @@ def show_product(bot, update, user_data):
     product_name, product_id = text_entered.split(Cons.dash)
     product = get_product_by_id(product_id)
     user_data[UserData.last_product] = product
-    kb = [[ReplyKeyboards.add_to_basket, ReplyKeyboards.back]]
+    kb = [[ReplyKeyboards.add_product_to_order, ReplyKeyboards.back]]
     reply_markup = ReplyKeyboardMarkup(keyboard=kb)
     text = BotMessages.product_info.format(name=product.name, category=product.category, price=product.price,
                                            inventory=product.inventory, description=product.description)
@@ -67,26 +67,25 @@ def show_product(bot, update, user_data):
     return ConversationStates.PRODUCT_INFO
 
 
-def is_un_payed_order():
-    pass
-
-
-def add_to_basket(bot, update, user_data):
-    store_list = get_store_list()
+def add_product_to_order(bot, update, user_data):
     chat_id = update.message.chat_id
     product = user_data[UserData.last_product]
-    if is_un_payed_order():
-        add_order_product()
-    else:
+    count = user_data[UserData.count, None]
+    if not count:
+        count = 1
+    current_order = get_customer_current_order(customer_chat_id=chat_id)
+    if not current_order:
         add_order(customer_chat_id=chat_id, address_id=product.address.id, description=product.description)
-    store_name_list = get_name_list_from_store(store_list)
-    reply_keyboard = [store_name_list]
+        current_order = get_customer_current_order(customer_chat_id=chat_id)
+    add_order_product(order_id=current_order.id, product_id=product.id, count=count)
+    kb = [[ReplyKeyboards.back, ReplyKeyboards.finish_order_and_pay]]
+    reply_keyboard = [kb]
     reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
-    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
+    update.message.reply_text(BotMessages.success_add_product_to_order, reply_markup=reply_markup)
     return ConversationStates.PRODUCT
 
 
-def show_basket(bot, update, user_data):
+def show_order(bot, update, user_data):
     store_list = get_store_list()
     store_name_list = get_name_list_from_store(store_list)
     reply_keyboard = [store_name_list]
