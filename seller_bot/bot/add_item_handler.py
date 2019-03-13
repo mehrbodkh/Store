@@ -1,6 +1,8 @@
+from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
 
 from seller_bot.constants.seller_constants import *
+from seller_bot.mocks import tags_list
 
 
 def add_item_enter_name(bot, update):
@@ -15,7 +17,6 @@ def add_item_name_callback(bot, update):
 
 def add_item_price_callback(bot, update):
     # todo add price to db
-
     return send_photo_message(bot, update)
 
 
@@ -34,9 +35,13 @@ def add_item_description_callback(bot, update):
 def add_item_tag_callback(bot, update):
     # todo add tag to db
 
+    keys = tags_list
+    if update.message.text not in keys:
+        keys.append(update.message.text)
+
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_tag_tutorial
+        text=Messages.end_add_conversation
     )
     return ConversationHandler.END
 
@@ -76,6 +81,7 @@ def send_name_message(bot, update):
 def send_tag_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_tag_tutorial
+        text=Messages.add_item_tag_tutorial,
+        reply_markup=ReplyKeyboardMarkup(keyboard=[tags_list])
     )
     return ConversationStates.TAG
