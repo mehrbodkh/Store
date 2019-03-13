@@ -56,7 +56,8 @@ def add_item_inventory_callback(bot, update, user_data):
 
         bot.send_message(
             chat_id=update.message.chat_id,
-            text=Messages.end_add_conversation
+            text=Messages.end_add_conversation,
+            reply_markup=ReplyKeyboardMarkup(keyboard=[[Keyboards.return_to_main_menu]])
         )
         return ConversationHandler.END
     except:
