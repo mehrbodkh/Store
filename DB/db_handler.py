@@ -84,17 +84,17 @@ def get_product_by_id(product_id):
 
 
 def get_products_by_category(category):
-    return session.query(Product).filter(Product.category == category, Product.inventory.isnot(0),
+    return session.query(Product).filter(Product.category == category, Product.inventory != 0,
                                          Product.inventory.isnot(None)).all()
 
 
 def get_products_by_store_id(store_id):
-    return session.query(Product).filter(Product.store_id == store_id, Product.inventory.isnot(0),
+    return session.query(Product).filter(Product.store_id == store_id, Product.inventory != 0,
                                          Product.inventory.isnot(None)).all()
 
 
 def find_products_by_name(name):
-    return session.query(Product).filter(Product.name.like("%" + name + "%"), Product.inventory.isnot(0),
+    return session.query(Product).filter(Product.name.like("%" + name + "%"), Product.inventory != 0,
                                          Product.inventory.isnot(None)).all()
 
 
@@ -105,8 +105,8 @@ def set_product_inventory(product_id, inventory):
 
 
 def get_product_categories():
-    categories = session.query(distinct(Product.category)).filter(Product.inventory.isnot(0),
-                                                                  Product.inventory.isnot(None)).all()
+    categories = session.query(distinct(Product.category)).filter(Product.inventory != 0,
+                                                                  Product.inventory is not None).all()
     categories = [category[0] for category in categories]
     result = []
     for category in categories:

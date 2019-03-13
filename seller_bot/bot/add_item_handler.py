@@ -27,7 +27,7 @@ def add_item_price_callback(bot, update, user_data):
 
 def add_item_photo_callback(bot, update, user_data):
     try:
-        user_data["item_photo"] = update.message.photo[-1].file_id
+        user_data["item_photo"] = update.message.photo[0].file_id
         return send_description_message(bot, update)
     except:
         return send_photo_message(bot, update)
