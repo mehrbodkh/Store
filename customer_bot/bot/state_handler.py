@@ -1,9 +1,11 @@
+from telegram import Bot
+
 from customer_bot.bot.customer import *
-from customer_bot.main_config import BotConfig
+from main_config import BotConfig
 
 
 def main():
-    bot = Bot(token=BotConfig.bot_token,
+    bot = Bot(token=BotConfig.customer_token,
               base_url=BotConfig.base_url,
               base_file_url=BotConfig.base_file_url)
     updater = Updater(bot=bot)

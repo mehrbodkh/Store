@@ -2,17 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-import logging
-
-import telegram
-from persian import persian
-from telegram import (ReplyKeyboardMarkup, Bot, LabeledPrice)
+from telegram import (ReplyKeyboardMarkup, LabeledPrice)
 from telegram.ext import *
 
 # Enable logging
 from DB.db_handler import *
 from customer_bot.constants.messages import *
-from customer_bot.main_config import BotConfig
+from main_config import BotConfig
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
@@ -39,7 +35,7 @@ def show_categories(bot, update, user_data):
 
 def show_products_list(bot, update, user_data):
     category = update.message.text
-    all_products = get_product_by_category(category)
+    all_products = get_products_by_category(category)
     kb = [product.name + Cons.dash + str(product.id) for product in all_products]
     reply_keyboard = [kb]
     reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
