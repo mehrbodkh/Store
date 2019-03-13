@@ -5,7 +5,7 @@ class Messages:
     end_add_conversation = "محصول شما با موفقیت به فروشگاه اضافه شد."
 
     add_item_name_tutorial = "نام محصول خود را وارد کنید:"
-    add_item_price_tutorial = "قیمت محصول خود را وارد کنید:"
+    add_item_price_tutorial = "قیمت محصول خود را به عدد وارد کنید:"
     add_item_photo_tutorial = "تصویر محصول را ارسال کنید:"
     add_item_description_tutorial = "توضیحات محصول خود را وارد کنید:"
     add_item_tag_tutorial = "دسته‌ی محصول خود را انتخاب کنید:\nبرای افزودن دسته‌ی جدید نام دسته‌ی جدید را ارسال " \
