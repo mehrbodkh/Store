@@ -8,6 +8,7 @@ from telegram.ext import *
 from seller_bot.bot.add_item_handler import *
 from seller_bot.bot.remove_item_handler import *
 from seller_bot.constants.seller_constants import *
+from seller_bot.show_all_products_handler import show_all_products_callback
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -24,7 +25,7 @@ def start_manager(bot, update):
 
 
 def start_managing_tour(bot, update):
-    reply_keyboard = [[Keyboards.add_item, Keyboards.remove_item]]
+    reply_keyboard = [[Keyboards.add_item, Keyboards.remove_item, Keyboards.show_all_items]]
     bot.send_message(
         chat_id=update.message.chat_id,
         text=Messages.start_conversation_tour,
@@ -48,8 +49,16 @@ def remove_callback(bot, update):
 
 start_command_handler = CommandHandler("start", start_manager)
 
+show_all_items_message_handler = RegexHandler(
+    pattern='^(' + Keyboards.show_all_items + ')$',
+    callback=show_all_products_callback
+)
+
 add_item_conversation_handler = ConversationHandler(
-    entry_points=[RegexHandler(pattern='^(' + Keyboards.add_item + ')$', callback=add_item_enter_name, pass_user_data=True)],
+    entry_points=[RegexHandler(
+        pattern='^(' + Keyboards.add_item + ')$',
+        callback=add_item_enter_name, pass_user_data=True)
+    ],
     states={
         ConversationStates.NAME: [
             MessageHandler(filters=Filters.text, callback=add_item_name_callback, pass_user_data=True)
