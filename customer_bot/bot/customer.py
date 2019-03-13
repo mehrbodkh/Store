@@ -99,9 +99,6 @@ def show_order_products(bot, update, user_data):
 
 
 def request_location(bot, update, user_data):
-    chat_id = update.message.chat_id
-    current_order = get_customer_current_order(customer_chat_id=chat_id)
-    current_order
     reply_keyboard = [[ReplyKeyboards.back]]
     reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
     update.message.reply_text(BotMessages.send_location, reply_markup=reply_markup)
@@ -109,10 +106,15 @@ def request_location(bot, update, user_data):
 
 
 def send_order_payment(bot, update, user_data):
+    chat_id = update.message.chat_id
+    user_location = update.message.location
+    current_order = get_customer_current_order(customer_chat_id=chat_id)
+    set_order_address(order_id=current_order.id, lat=user_location.latitude, lng=user_location.longitude)
+
     total_price = user_data[UserData.total_price]
-    bot.send_invoice(chat_id=update.message.chat_id, title=BotMessages.title, description="description",
+    bot.send_invoice(chat_id=update.message.chat_id, title=BotMessages.title, description="😊 😊 😊 😊 😊 😊",
                      payload="payload", provider_token=BotConfig.bank_card_number, start_parameter="", currency="IRR",
-                     prices=[LabeledPrice('label1', total_price)])
+                     prices=[LabeledPrice('قیمت کل', total_price)])
     return ConversationStates.PAYMENT
 
 

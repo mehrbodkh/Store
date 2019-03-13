@@ -21,7 +21,7 @@ def main():
             ConversationStates.PRODUCT_ADDED_TO_ORDER: [
                 MessageHandler(Filters.text, show_order_products, pass_user_data=True)],
             ConversationStates.CONFIRM_ORDER: [MessageHandler(Filters.text, request_location, pass_user_data=True)],
-            ConversationStates.LOCATION: [MessageHandler(Filters.text, send_order_payment, pass_user_data=True)],
+            ConversationStates.LOCATION: [MessageHandler(Filters.location, send_order_payment, pass_user_data=True)],
 
         },
 

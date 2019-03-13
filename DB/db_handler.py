@@ -135,9 +135,15 @@ def set_order_invoice(order_id, msg_uid):
     order = get_order_by_id(order_id)
     order.invoice_msg_uid = msg_uid
 
+
 @db_persist
-def set_order_address(order_id):
-    return session.query(OrderProduct).filter(OrderProduct.order_id == order_id).all()
+def set_order_address(order_id, address=None, lat=None, lng=None):
+    if lat and lng:
+        address = Address(city=None, address=None, latitude=lat, longitude=lng)
+        session.add(address)
+    order = get_order_by_id(order_id)
+    order.address = address
+
 
 @db_persist
 def add_payment(order_id, amount, msg_uid, traceNo):

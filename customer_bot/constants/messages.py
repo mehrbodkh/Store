@@ -1,5 +1,5 @@
 class BotMessages:
-    title = ""
+    title = "پیام پرداخت"
     total_price = "\n" \
                   "جمع کل :‌{} ریال"
     send_location = "موقعیت خود را از روی نقشه ارسال نمایید."
