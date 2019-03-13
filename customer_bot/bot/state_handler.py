@@ -18,10 +18,10 @@ def main():
         states={
             SORT_TYPE: [RegexHandler(pattern='^(Boy|Girl|Other)$', callback=stores)],
 
-            PHOTO: [MessageHandler(Filters.photo, products),
+            STORE: [MessageHandler(Filters.photo, products),
                     CommandHandler('skip', skip_photo)],
 
-            LOCATION: [MessageHandler(Filters.location, location),
+            CATEGORY: [MessageHandler(Filters.location, location),
                        CommandHandler('skip', skip_location)],
 
             BIO: [MessageHandler(Filters.text, bio)]
