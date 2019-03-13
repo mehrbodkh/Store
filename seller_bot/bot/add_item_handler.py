@@ -45,16 +45,19 @@ def add_item_tag_callback(bot, update, user_data):
 
 
 def add_item_inventory_callback(bot, update, user_data):
-    user_data["item_inventory"] = update.message.text
-    # todo update db
+    try:
+        user_data["item_inventory"] = int(update.message.text)
+        # todo update db
 
-    add_item_to_db(user_data["item_name"])
+        add_item_to_db(user_data["item_name"])
 
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.end_add_conversation
-    )
-    return ConversationHandler.END
+        bot.send_message(
+            chat_id=update.message.chat_id,
+            text=Messages.end_add_conversation
+        )
+        return ConversationHandler.END
+    except:
+        return send_inventory_message(bot, update)
 
 
 def send_description_message(bot, update):
