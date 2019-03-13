@@ -8,11 +8,11 @@ class Store(Base):
     __tablename__ = "stores"
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    owner_chat_id = Column(String)
+    owner_chat_id = Column(Integer)
     bank_card_number = Column(String(16))
     photo = Column(String)
     address_id = Column(Integer, ForeignKey("address.id"))
-    address = relationship("Address", backref=backref("user_address", cascade="all, delete-orphan"))
+    address = relationship("Address")
     products = relationship("Product")
     description = Column(Text)
 
