@@ -1,4 +1,11 @@
 class BotMessages:
+    success_add_product_to_order = "محصول با موفقیت به سبد خرید شما اضافه شد."
+    product_info = "نام محصول: *{name}*\n" \
+                   "دسته: *{category}*\n" \
+                   "قیمت: *{price}*\n" \
+                   "تعداد موجود: *{inventory}*\n" \
+                   "توضیحات: *{description}*\n"
+    cat_count = " ({})"
     choose_product = "محصول خود را انتخاب نمایید:"
     choose_category = "دسته محصول خود را انتخاب نمایید:"
     stores = "فروشگاه مورد نظر را انتخاب نمایید:"
@@ -8,12 +15,22 @@ class BotMessages:
     start = "سلام به بات فروشگاه خوش آمدید😊😊\nلطفا از بین گزینه ها انتخاب کنید: 👇👇"
 
 
+class Cons:
+    dash = "-"
+
+
 class ReplyKeyboards:
+    finish_order_and_pay = "تکمیل خرید و پرداخت"
+    add_product_to_order = "اضافه کردن به سبد خرید"
+    back = "بازگشت"
     products = "محصولات"
     stores = "فروشگاه ها"
 
 
-class UserDate:
+class UserData:
+    count = "count"
+    last_product = "last_product"
+    categories_list = "categories_list"
     store = "store"
     store_list = "store_list"
 

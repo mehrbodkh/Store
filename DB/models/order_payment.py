@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship
 from DB.models.base import Base
 
 
-class OrderPayment(Base):
-    __tablename__ = "order_payments"
+class Payment(Base):
+    __tablename__ = "payments"
     id = Column(Integer, primary_key=True)
     order_id = Column(Integer, ForeignKey("orders.id"), unique=True)
     order = relationship("Order")

@@ -1,3 +1,4 @@
+import DB.db_handler
 from customer_bot.bot.state_handler import main
 
 if __name__ == '__main__':

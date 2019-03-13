@@ -5,7 +5,7 @@ from sqlalchemy import distinct
 from DB.models.address import Address
 from DB.models.base import Session, Base, engine
 from DB.models.order import Order
-from DB.models.order_payment import OrderPayment
+from DB.models.order_payment import Payment
 from DB.models.order_product import OrderProduct
 from DB.models.product import Product
 from DB.models.store import Store
@@ -138,9 +138,14 @@ def set_order_invoice(order_id, msg_uid):
 
 @db_persist
 def add_payment(order_id, amount, msg_uid, traceNo):
-    order_payment = OrderPayment(order_id, amount, msg_uid, traceNo)
+    order_payment = Payment(order_id, amount, msg_uid, traceNo)
     session.add(order_payment)
 
 
 def get_payment(order_id):
-    return session.query(OrderPayment).filter(OrderPayment.order_id == order_id).one_or_none()
+    return session.query(Payment).filter(Payment.order_id == order_id).one_or_none()
+
+
+def get_customer_current_order(customer_chat_id):
+    return session.query(Order).filter(Order.invoice_msg_uid.is_(None),
+                                       Order.customer_chat_id == customer_chat_id).one_or_none()
