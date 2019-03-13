@@ -1,6 +1,6 @@
 from telegram.ext import ConversationHandler
 
-from DB.db_handler import get_product_by_store_id, set_product_inventory
+from DB.db_handler import get_products_by_store_id, set_product_inventory, find_products_by_name
 from seller_bot.constants.seller_constants import Messages, ConversationStates
 from seller_bot.mocks import products_list
 
@@ -10,7 +10,7 @@ def remove_item_enter_name(bot, update, user_data):
 
 
 def remove_item_name_callback(bot, update, user_data):
-    return send_product_list(bot, update.message.text, user_data)
+    return send_product_list(bot, update, user_data)
 
 
 def remove_item_product_callback(bot, update, user_data):
@@ -51,8 +51,7 @@ def remove_item_from_db(product_id):
 
 def send_product_list(bot, update, user_data):
     product_name = update.message.text
-    # todo import from db_handler
-    product_list = get_product_by_name(product_name)
+    product_list = find_products_by_name(product_name)
 
     if not product_list:
         return send_not_found_message(bot, update, user_data)
@@ -64,8 +63,11 @@ def send_product_list(bot, update, user_data):
 
 
 def send_product(bot, update, product):
-    # todo implement me
-    return
+    bot.send_photo(
+        chat_id=update.message.chat_id,
+        photo=product.photo,
+        caption=str(product.name + "\n" + product.description + "\n" + "[انتخاب](send:" + str(product.id) + ")")
+    )
 
 
 def delete_data_from_db(product_id):
