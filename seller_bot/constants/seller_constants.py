@@ -8,7 +8,9 @@ class Messages:
     add_item_price_tutorial = "لطفا قیمت محصول خود را وارد کنید:"
     add_item_photo_tutorial = "لطفا تصویر محصول را ارسال کنید:"
     add_item_description_tutorial = "لطفا توضیحات محصول خود را وارد کنید:"
-    add_item_tag_tutorial = "لطفا دسته‌ی محصول خود را انتخاب کنید:"
+    add_item_tag_tutorial = "لطفا دسته‌ی محصول خود را انتخاب کنید:\nبرای افزودن دسته‌ی جدید نام دسته‌ی جدید را ارسال " \
+                            "کنید. "
+    add_item_inventory_tutorial = "تعداد باقیمانده‌ی محصول را وارد نمایید:"
 
 
 class Keyboards:
