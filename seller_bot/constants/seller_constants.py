@@ -3,6 +3,8 @@ class Messages:
                          "فروشگاه خود به آدرس @BazovanStore_Bot را مدیریت کنید. "
     start_conversation_tour = "برای مدیریت اجناس فروشگاه یکی از گزینه‌های زیر را انتخاب نمایید:"
 
+    add_item_name_tutorial = "لطفا نام محصول خود را وارد کنید:"
+
 
 class Keyboards:
     add_item = "افزودن محصول"
@@ -10,5 +12,4 @@ class Keyboards:
 
 
 class ConversationStates:
-    WAIT_FOR_INVENTORY_COMMAND, ADD_ITEM, REMOVE_ITEM = range(3)
-
+    NAME, PRICE, PHOTO, DESCRIPTION, INVENTORY, TAG = range(6)

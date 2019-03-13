@@ -10,6 +10,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(start_command_handler)
+    dp.add_handler(add_item_conversation_handler)
 
     # dp.add_handler(MessageHandler(Filters.text, echo))
 
