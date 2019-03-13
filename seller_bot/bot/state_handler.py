@@ -11,8 +11,7 @@ def main():
 
     dp.add_handler(start_command_handler)
     dp.add_handler(add_item_conversation_handler)
-
-    # dp.add_handler(MessageHandler(Filters.text, echo))
+    dp.add_handler(remove_item_conversation_handler)
 
     dp.add_error_handler(error)
 

@@ -3,10 +3,10 @@
 
 import logging
 
-from telegram import ReplyKeyboardMarkup
 from telegram.ext import *
 
 from seller_bot.bot.add_item_handler import *
+from seller_bot.bot.remove_item_handler import *
 from seller_bot.constants.seller_constants import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -68,6 +68,16 @@ add_item_conversation_handler = ConversationHandler(
         ],
         ConversationStates.INVENTORY: [
             MessageHandler(filters=Filters.text, callback=add_item_inventory_callback)
+        ]
+    },
+    fallbacks=[CommandHandler("cancel", error)]
+)
+
+remove_item_conversation_handler = ConversationHandler(
+    entry_points=[RegexHandler(pattern='^(' + Keyboards.remove_item + ')$', callback=remove_item_enter_name)],
+    states={
+        ConversationStates.NAME: [
+            MessageHandler(filters=Filters.text, callback=remove_item_name_callback)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]
