@@ -8,9 +8,9 @@ class UserAddress(Base):
     __tablename__ = "user_address"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User", backref=backref("user_address", cascade="all, delete-orphan"))
+    user = relationship("User")
     address_id = Column(Integer, ForeignKey("address.id"))
-    address = relationship("Address", backref=backref("user_address", cascade="all, delete-orphan"))
+    address = relationship("Address")
 
     def __init__(self, user, address):
         self.user = user

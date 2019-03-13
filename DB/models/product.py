@@ -13,7 +13,7 @@ class Product(Base):
     inventory = Column(Integer)
     photo = Column(String)
     store_id = Column(Integer, ForeignKey("stores.id"))
-    store = relationship("Store", backref=backref("products", cascade="all, delete-orphan"))
+    store = relationship("Store")
     description = Column(Text)
 
     def __init__(self, store_id, name, category, price, inventory, photo, description):

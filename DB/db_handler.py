@@ -1,10 +1,12 @@
 import logging
 
+from sqlalchemy import distinct
+
+from DB.models.address import Address
 from DB.models.base import Session, Base, engine
 from DB.models.product import Product
 from DB.models.store import Store
 from DB.models.user import User
-from DB.models.address import Address
 from DB.models.user_address import UserAddress
 
 Base.metadata.create_all(engine)
@@ -74,7 +76,7 @@ def add_store_product(store_id, name, category, price, inventory, photo, descrip
 
 
 def get_product_by_id(product_id):
-    return session.query(Product).filter(Product.id == product_id).all()
+    return session.query(Product).filter(Product.id == product_id).one_or_none()
 
 
 def get_product_by_category(category):
@@ -89,3 +91,13 @@ def get_product_by_store_id(store_id):
 def set_product_inventory(product_id, inventory):
     product = get_product_by_id(product_id)
     product.inventory = inventory
+
+
+def get_product_categories():
+    categories = session.query(distinct(Product.category)).all()
+    categories = [category[0] for category in categories]
+    result = []
+    for category in categories:
+        product_amount = session.query(Product).filter(Product.category == category).count()
+        result.append((category, product_amount))
+    return result
