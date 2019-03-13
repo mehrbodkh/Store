@@ -13,6 +13,7 @@ def main():
     dp.add_handler(add_item_conversation_handler)
     dp.add_handler(remove_item_conversation_handler)
     dp.add_handler(show_all_items_message_handler)
+    dp.add_handler(change_store_card_conversation_handler)
 
     dp.add_error_handler(error)
 

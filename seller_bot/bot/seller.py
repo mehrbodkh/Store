@@ -6,6 +6,7 @@ import logging
 from telegram.ext import *
 
 from seller_bot.bot.add_item_handler import *
+from seller_bot.bot.change_card_number_handler import change_card_number_enter, change_card_number_callback
 from seller_bot.bot.remove_item_handler import *
 from seller_bot.constants.seller_constants import *
 from seller_bot.show_all_products_handler import show_all_products_callback
@@ -25,7 +26,12 @@ def start_manager(bot, update):
 
 
 def start_managing_tour(bot, update):
-    reply_keyboard = [[Keyboards.add_item, Keyboards.remove_item, Keyboards.show_all_items]]
+    reply_keyboard = [[
+        Keyboards.add_item,
+        Keyboards.remove_item,
+        Keyboards.show_all_items,
+        Keyboards.change_store_card_number
+    ]]
     bot.send_message(
         chat_id=update.message.chat_id,
         text=Messages.start_conversation_tour,
@@ -91,6 +97,20 @@ remove_item_conversation_handler = ConversationHandler(
         ],
         ConversationStates.DELETE_PRODUCT_ID: [
             MessageHandler(filters=Filters.text, callback=remove_item_product_callback, pass_user_data=True)
+        ]
+    },
+    fallbacks=[CommandHandler("cancel", error)]
+)
+
+
+change_store_card_conversation_handler = ConversationHandler(
+    entry_points=[RegexHandler(
+        pattern='^(' + Keyboards.change_store_card_number + ')$',
+        callback=change_card_number_enter,
+        pass_user_data=True)],
+    states={
+        ConversationStates.CARD_NUMBER: [
+            MessageHandler(filters=Filters.text, callback=change_card_number_callback, pass_user_data=True)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]

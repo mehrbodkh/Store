@@ -73,6 +73,12 @@ def set_store_address(store_id, lat, lng):
 
 
 @db_persist
+def set_store_card_number(store_id, card_number):
+    store = get_store(store_id)
+    store.bank_card_number = card_number
+
+
+@db_persist
 def add_store_product(store_id, name, category, price, inventory, photo, description):
     product = Product(store_id, name, category, price, inventory, photo, description)
     session.add(product)
