@@ -1,7 +1,7 @@
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-from seller_bot.bot.seller import error, help, start_conversation_handler
+from seller_bot.bot.seller import error, start_conversation_handler
 from seller_bot.main_config import BotConfig
 
 
@@ -10,7 +10,6 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(start_conversation_handler)
-    dp.add_handler(CommandHandler("help", help))
 
     # dp.add_handler(MessageHandler(Filters.text, echo))
 
