@@ -40,15 +40,19 @@ def error(bot, update):
     logger.warning('Update "%s" caused error "%s"', update, update.message)
 
 
-def add_item_callback(bot, update):
+def add_item_name_callback(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
         text=Messages.add_item_name_tutorial
     )
-    return ConversationStates.NAME
+    return ConversationStates.PRICE
 
 
-def add_item_name_callback(bot, update):
+def add_item_price_callback(bot, update):
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.add_item_price_tutorial
+    )
     return ConversationStates.PRICE
 
 
@@ -60,10 +64,13 @@ def remove_callback(bot, update):
 start_command_handler = CommandHandler("start", start_manager)
 
 add_item_conversation_handler = ConversationHandler(
-    entry_points=[RegexHandler(pattern='^(' + Keyboards.add_item + ')$', callback=add_item_callback)],
+    entry_points=[RegexHandler(pattern='^(' + Keyboards.add_item + ')$', callback=add_item_name_callback)],
     states={
         ConversationStates.NAME: [
-            MessageHandler(filters=Filters.text, callback=add_item_name_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_price_callback)
+        ],
+        ConversationStates.PRICE: [
+            MessageHandler(filters=Filters.text, callback=add_item_price_callback)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]

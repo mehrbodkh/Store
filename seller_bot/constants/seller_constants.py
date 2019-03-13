@@ -4,6 +4,7 @@ class Messages:
     start_conversation_tour = "برای مدیریت اجناس فروشگاه یکی از گزینه‌های زیر را انتخاب نمایید:"
 
     add_item_name_tutorial = "لطفا نام محصول خود را وارد کنید:"
+    add_item_price_tutorial = "لطفا قیمت محصول خود را وارد کنید:"
 
 
 class Keyboards:
