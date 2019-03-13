@@ -40,28 +40,42 @@ def error(bot, update):
     logger.warning('Update "%s" caused error "%s"', update, update.message)
 
 
-def add_item_name_callback(bot, update):
+def add_item_enter_name(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
         text=Messages.add_item_name_tutorial
+    )
+    return ConversationStates.NAME
+
+
+def add_item_name_callback(bot, update):
+    # todo add name to db
+
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.add_item_price_tutorial
     )
     return ConversationStates.PRICE
 
 
 def add_item_price_callback(bot, update):
+    # todo add price to db
+
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_price_tutorial
+        text=Messages.add_item_photo_tutorial
     )
     return ConversationStates.PHOTO
 
 
 def add_item_photo_callback(bot, update):
+    # todo add photo to db
+
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_price_tutorial
+        text=Messages.add_item_photo_tutorial
     )
-    return ConversationStates.PHOTO
+    return ConversationStates.DESCRIPTION
 
 
 def remove_callback(bot, update):
@@ -72,16 +86,16 @@ def remove_callback(bot, update):
 start_command_handler = CommandHandler("start", start_manager)
 
 add_item_conversation_handler = ConversationHandler(
-    entry_points=[RegexHandler(pattern='^(' + Keyboards.add_item + ')$', callback=add_item_name_callback)],
+    entry_points=[RegexHandler(pattern='^(' + Keyboards.add_item + ')$', callback=add_item_enter_name)],
     states={
         ConversationStates.NAME: [
-            MessageHandler(filters=Filters.text, callback=add_item_price_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_name_callback)
         ],
         ConversationStates.PRICE: [
-            MessageHandler(filters=Filters.text, callback=add_item_photo_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_price_callback)
         ],
         ConversationStates.PHOTO: [
-            MessageHandler(filters=Filters.photo, callback=add_item_price_callback)
+            MessageHandler(filters=Filters.photo, callback=add_item_photo_callback)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]
