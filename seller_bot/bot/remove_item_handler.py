@@ -1,5 +1,6 @@
 from telegram.ext import ConversationHandler
 
+from DB.db_handler import get_product_by_store_id, set_product_inventory
 from seller_bot.constants.seller_constants import Messages, ConversationStates
 from seller_bot.mocks import products_list
 
@@ -9,12 +10,15 @@ def remove_item_enter_name(bot, update, user_data):
 
 
 def remove_item_name_callback(bot, update, user_data):
-    # todo find product
-    if update.message.text in products_list:
-        remove_item_from_db(update.message.text)
-        return send_deleted_message(bot, update)
+    return send_product_list(bot, update.message.text, user_data)
 
-    return send_not_found_message(bot, update, user_data)
+
+def remove_item_product_callback(bot, update, user_data):
+    try:
+        delete_data_from_db(int(update.message.text))
+        return send_deleted_message(bot, update)
+    except:
+        remove_item_name_callback(bot, update, user_data)
 
 
 def send_name_message(bot, update):
@@ -41,5 +45,28 @@ def send_not_found_message(bot, update, user_data):
     return remove_item_enter_name(bot, update, user_data)
 
 
-def remove_item_from_db(text):
-    products_list.remove(text)
+def remove_item_from_db(product_id):
+    set_product_inventory(product_id, 0)
+
+
+def send_product_list(bot, update, user_data):
+    product_name = update.message.text
+    # todo import from db_handler
+    product_list = get_product_by_name(product_name)
+
+    if not product_list:
+        return send_not_found_message(bot, update, user_data)
+
+    for product in product_list:
+        send_product(bot, update, product)
+
+    return ConversationStates.DELETE_PRODUCT_ID
+
+
+def send_product(bot, update, product):
+    # todo implement me
+    return
+
+
+def delete_data_from_db(product_id):
+    set_product_inventory(product_id, 0)

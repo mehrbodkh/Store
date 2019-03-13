@@ -79,6 +79,9 @@ remove_item_conversation_handler = ConversationHandler(
     states={
         ConversationStates.NAME: [
             MessageHandler(filters=Filters.text, callback=remove_item_name_callback, pass_user_data=True)
+        ],
+        ConversationStates.DELETE_PRODUCT_ID: [
+            MessageHandler(filters=Filters.text, callback=remove_item_product_callback, pass_user_data=True)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]
