@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Float
 from sqlalchemy.orm import relationship, backref
 
 from DB.models.base import Base
@@ -9,7 +9,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     category = Column(String)
-    price = Column(Integer)
+    price = Column(Float)
     inventory = Column(Integer)
     photo = Column(String)
     store_id = Column(Integer, ForeignKey("stores.id"))
