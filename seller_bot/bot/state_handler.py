@@ -1,6 +1,3 @@
-
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
 from seller_bot.bot.seller import *
 from seller_bot.main_config import BotConfig
 

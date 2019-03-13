@@ -49,25 +49,25 @@ def remove_callback(bot, update):
 start_command_handler = CommandHandler("start", start_manager)
 
 add_item_conversation_handler = ConversationHandler(
-    entry_points=[RegexHandler(pattern='^(' + Keyboards.add_item + ')$', callback=add_item_enter_name)],
+    entry_points=[RegexHandler(pattern='^(' + Keyboards.add_item + ')$', callback=add_item_enter_name, pass_user_data=True)],
     states={
         ConversationStates.NAME: [
-            MessageHandler(filters=Filters.text, callback=add_item_name_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_name_callback, pass_user_data=True)
         ],
         ConversationStates.PRICE: [
-            MessageHandler(filters=Filters.text, callback=add_item_price_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_price_callback, pass_user_data=True)
         ],
         ConversationStates.PHOTO: [
-            MessageHandler(filters=Filters.photo, callback=add_item_photo_callback)
+            MessageHandler(filters=Filters.photo, callback=add_item_photo_callback, pass_user_data=True)
         ],
         ConversationStates.DESCRIPTION: [
-            MessageHandler(filters=Filters.text, callback=add_item_description_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_description_callback, pass_user_data=True)
         ],
         ConversationStates.TAG: [
-            MessageHandler(filters=Filters.text, callback=add_item_tag_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_tag_callback, pass_user_data=True)
         ],
         ConversationStates.INVENTORY: [
-            MessageHandler(filters=Filters.text, callback=add_item_inventory_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_inventory_callback, pass_user_data=True)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]

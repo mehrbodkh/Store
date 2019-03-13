@@ -5,36 +5,32 @@ from seller_bot.constants.seller_constants import *
 from seller_bot.mocks import tags_list
 
 
-def add_item_enter_name(bot, update):
+def add_item_enter_name(bot, update, user_data):
     return send_name_message(bot, update)
 
 
-def add_item_name_callback(bot, update):
-    # todo add name to db
-
+def add_item_name_callback(bot, update, user_data):
+    user_data["item_name"] = update.message.text
     return send_price_message(bot, update)
 
 
-def add_item_price_callback(bot, update):
-    # todo add price to db
+def add_item_price_callback(bot, update, user_data):
+    user_data["item_price"] = update.message.text
     return send_photo_message(bot, update)
 
 
-def add_item_photo_callback(bot, update):
-    # todo add photo to db
-
+def add_item_photo_callback(bot, update, user_data):
+    user_data["item_photo"] = update.message.photo[-1].get_file()
     return send_description_message(bot, update)
 
 
-def add_item_description_callback(bot, update):
-    # todo add description to db
-
+def add_item_description_callback(bot, update, user_data):
+    user_data["item_description"] = update.message.text
     return send_tag_message(bot, update)
 
 
-def add_item_tag_callback(bot, update):
-    # todo add tag to db
-
+def add_item_tag_callback(bot, update, user_data):
+    user_data["item_tag"] = update.message.text
     keys = tags_list
     if update.message.text not in keys:
         keys.append(update.message.text)
@@ -42,8 +38,8 @@ def add_item_tag_callback(bot, update):
     return send_inventory_message(bot, update)
 
 
-def add_item_inventory_callback(bot, update):
-    # todo add inventory to db
+def add_item_inventory_callback(bot, update, user_data):
+    user_data["item_inventory"] = update.message.text
 
     bot.send_message(
         chat_id=update.message.chat_id,
