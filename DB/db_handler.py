@@ -134,8 +134,8 @@ def get_order_by_msg_uid(msg_uid):
 
 
 @db_persist
-def add_order_product(order_id, product_id, count):
-    order_product = OrderProduct(order_id, product_id, count)
+def add_order_product(order_id, product_id, count, price_per_one):
+    order_product = OrderProduct(order_id, product_id, count, price_per_one)
     session.add(order_product)
 
 
@@ -143,6 +143,15 @@ def add_order_product(order_id, product_id, count):
 def set_order_invoice(order_id, msg_uid):
     order = get_order_by_id(order_id)
     order.invoice_msg_uid = msg_uid
+
+
+@db_persist
+def set_order_address(order_id, address=None, lat=None, lng=None):
+    if lat and lng:
+        address = Address(city=None, address=None, latitude=lat, longitude=lng)
+        session.add(address)
+    order = get_order_by_id(order_id)
+    order.address = address
 
 
 @db_persist
@@ -158,3 +167,7 @@ def get_payment(order_id):
 def get_customer_current_order(customer_chat_id):
     return session.query(Order).filter(Order.invoice_msg_uid.is_(None),
                                        Order.customer_chat_id == customer_chat_id).one_or_none()
+
+
+def get_current_order_products(order_id):
+    return session.query(OrderProduct).filter(OrderProduct.order_id == order_id).all()

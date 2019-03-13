@@ -18,6 +18,10 @@ def main():
             ConversationStates.CATEGORY: [MessageHandler(Filters.text, show_products_list, pass_user_data=True)],
             ConversationStates.PRODUCT: [MessageHandler(Filters.text, show_product, pass_user_data=True)],
             ConversationStates.PRODUCT_INFO: [MessageHandler(Filters.text, add_product_to_order, pass_user_data=True)],
+            ConversationStates.PRODUCT_ADDED_TO_ORDER: [
+                MessageHandler(Filters.text, show_order_products, pass_user_data=True)],
+            ConversationStates.CONFIRM_ORDER: [MessageHandler(Filters.text, request_location, pass_user_data=True)],
+            ConversationStates.LOCATION: [MessageHandler(Filters.location, send_order_payment, pass_user_data=True)],
 
         },
 
@@ -25,7 +29,6 @@ def main():
     )
 
     dp.add_handler(conversation_handler)
-
     # log all errors
     dp.add_error_handler(error)
 
