@@ -10,5 +10,5 @@ class Keyboards:
 
 
 class ConversationStates:
-    ADD_ITEM, REMOVE_ITEM = range(2)
+    WAIT_FOR_INVENTORY_COMMAND, ADD_ITEM, REMOVE_ITEM = range(3)
 
