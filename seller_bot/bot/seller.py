@@ -8,8 +8,8 @@ from telegram.ext import *
 from seller_bot.bot.add_item_handler import *
 from seller_bot.bot.change_card_number_handler import change_card_number_enter, change_card_number_callback
 from seller_bot.bot.remove_item_handler import *
+from seller_bot.bot.show_all_products_handler import show_all_products_callback
 from seller_bot.constants.seller_constants import *
-from seller_bot.show_all_products_handler import show_all_products_callback
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -30,6 +30,7 @@ def help_manager(bot, update):
         chat_id=update.message.chat_id,
         text=Messages.help_message
     )
+
 
 def start_managing_tour(bot, update):
     reply_keyboard = [[
