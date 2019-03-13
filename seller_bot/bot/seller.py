@@ -20,8 +20,6 @@ def start_manager(bot, update):
         text=Messages.start_conversation
     )
     start_managing_tour(bot, update)
-    return ConversationStates.WAIT_FOR_INVENTORY_COMMAND
-
 
 
 def start_managing_tour(bot, update):
@@ -51,13 +49,4 @@ def remove_callback(bot, update):
     update.message.reply_text(update.message.text)
     return ConversationHandler.END
 
-start_conversation_handler = ConversationHandler(
-    entry_points=[CommandHandler("start", start_manager)],
-    states={
-        ConversationStates.WAIT_FOR_INVENTORY_COMMAND: [
-            RegexHandler(pattern='^('+Keyboards.add_item+')$', callback=add_callback),
-            RegexHandler(pattern='^('+Keyboards.remove_item+')$', callback=add_callback)
-        ],
-    },
-    fallbacks=[CommandHandler('cancel', error)]
-)
+start_command_handler = CommandHandler("start", start_manager)
