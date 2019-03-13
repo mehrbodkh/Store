@@ -1,11 +1,11 @@
 from telegram import Bot
 
 from seller_bot.bot.seller import *
-from seller_bot.main_config import BotConfig
+from main_config import BotConfig
 
 
 def main():
-    bot = Bot(token=BotConfig.bot_token, base_url=BotConfig.base_url, base_file_url=BotConfig.base_url_file)
+    bot = Bot(token=BotConfig.seller_token, base_url=BotConfig.base_url, base_file_url=BotConfig.base_file_url)
     updater = Updater(bot=bot)
     dp = updater.dispatcher
 

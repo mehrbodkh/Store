@@ -1,11 +1,9 @@
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-import DB.db_handler
 from DB.db_handler import add_store_product
 from DB.db_handler import get_product_categories
 from seller_bot.constants.seller_constants import *
-from seller_bot.mocks import tags_list, products_list
 
 
 def add_item_enter_name(bot, update, user_data):

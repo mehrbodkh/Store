@@ -1,0 +1,65 @@
+version: '3.0'
+services:
+  pg_store:
+    image: docker.bale.ai/money/balepostgres:1.6.0
+    container_name: pg_store
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123456
+      - POSTGRES_DB=my_db
+      - TZ=Asia/Tehran
+    volumes:
+      - /home/docker/volumes/pg_store/postgres/:/var/lib/postgresql/data/
+    ports:
+      - "5443:5432"
+  bot_store_customer:
+    image: docker.bale.ai/money/bot_store_customer:0.0-1
+    container_name: bot_store_customer
+    environment:
+      #   PostgreSQL Config
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123456
+      - POSTGRES_DB=my_db
+      - POSTGRES_HOST=pg_store
+      - POSTGRES_PORT=5432
+      #   Config
+      - BASE_URL=https://tapi.bale.ai/
+      - BASE_FILE_URL=https://tapi.bale.ai/file/
+      - CUSTOMER_TOKEN=1388106136:a072926adf3398c38da42126aa52ffbee8e55b83
+      #   Log config
+      - USE_GRAYLOG=0
+      - SOURCE=bot_store_customer_source
+      - GRAYLOG_HOST=127.0.0.1
+      - GRAYLOG_PORT=12201
+      - LOG_LEVEL=10
+      - LOG_FACILITY_NAME=bot_store_facility
+      - MONITORING_HASH=cabb3f498ac5a037f669f658f1be08c3
+    restart: always # use always
+    depends_on:
+      - pg_store
+  bot_store_seller:
+    image: docker.bale.ai/money/bot_store_seller:0.0-1
+    container_name: bot_store_seller
+    environment:
+      #   PostgreSQL Config
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123456
+      - POSTGRES_DB=my_db
+      - POSTGRES_HOST=pg_store
+      - POSTGRES_PORT=5432
+      #   Config
+      - BASE_URL=https://tapi.bale.ai/
+      - BASE_FILE_URL=https://tapi.bale.ai/file/
+      - SELLER_TOKEN=2006272470:fb99d5cbfa58d77055e7576d3683321a3f58454b
+      #   Log config
+      - USE_GRAYLOG=0
+      - SOURCE=bot_store_seller_source
+      - GRAYLOG_HOST=127.0.0.1
+      - GRAYLOG_PORT=12201
+      - LOG_LEVEL=10
+      - LOG_FACILITY_NAME=bot_store_facility
+      - MONITORING_HASH=cabb3f498ac5a037f669f658f1be08c3
+    restart: always # use always
+    depends_on:
+      - pg_store

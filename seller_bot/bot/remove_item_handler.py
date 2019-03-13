@@ -2,7 +2,6 @@ from telegram.ext import ConversationHandler
 
 from DB.db_handler import get_products_by_store_id, set_product_inventory, find_products_by_name
 from seller_bot.constants.seller_constants import Messages, ConversationStates
-from seller_bot.mocks import products_list
 
 
 def remove_item_enter_name(bot, update, user_data):
