@@ -15,10 +15,12 @@ class Store(Base):
     address = relationship("Address")
     products = relationship("Product")
     description = Column(Text)
+    remaining_times = Column(Integer)
 
-    def __init__(self, name, owner_chat_id, bank_card_number, photo, description):
+    def __init__(self, name, owner_chat_id, bank_card_number, photo, description, remaining_times):
         self.name = name
         self.owner_chat_id = owner_chat_id
         self.bank_card_number = bank_card_number
         self.photo = photo
         self.description = description
+        self.remaining_times = remaining_times
