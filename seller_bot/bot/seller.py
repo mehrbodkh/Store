@@ -6,6 +6,7 @@ import logging
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import *
 
+from seller_bot.bot.add_item_handler import *
 from seller_bot.constants.seller_constants import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -38,64 +39,6 @@ def echo(bot, update):
 
 def error(bot, update):
     logger.warning('Update "%s" caused error "%s"', update, update.message)
-
-
-def add_item_enter_name(bot, update):
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.add_item_name_tutorial
-    )
-    return ConversationStates.NAME
-
-
-def add_item_name_callback(bot, update):
-    # todo add name to db
-
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.add_item_price_tutorial
-    )
-    return ConversationStates.PRICE
-
-
-def add_item_price_callback(bot, update):
-    # todo add price to db
-
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.add_item_photo_tutorial
-    )
-    return ConversationStates.PHOTO
-
-
-def add_item_photo_callback(bot, update):
-    # todo add photo to db
-
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.add_item_description_tutorial
-    )
-    return ConversationStates.DESCRIPTION
-
-
-def add_item_description_callback(bot, update):
-    # todo add description to db
-
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.add_item_tag_tutorial
-    )
-    return ConversationStates.TAG
-
-
-def add_item_tag_callback(bot, update):
-    # todo add tag to db
-
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.add_item_tag_tutorial
-    )
-    return ConversationHandler.END
 
 
 def remove_callback(bot, update):
