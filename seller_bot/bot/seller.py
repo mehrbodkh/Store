@@ -53,7 +53,15 @@ def add_item_price_callback(bot, update):
         chat_id=update.message.chat_id,
         text=Messages.add_item_price_tutorial
     )
-    return ConversationStates.PRICE
+    return ConversationStates.PHOTO
+
+
+def add_item_photo_callback(bot, update):
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.add_item_price_tutorial
+    )
+    return ConversationStates.PHOTO
 
 
 def remove_callback(bot, update):
@@ -70,7 +78,10 @@ add_item_conversation_handler = ConversationHandler(
             MessageHandler(filters=Filters.text, callback=add_item_price_callback)
         ],
         ConversationStates.PRICE: [
-            MessageHandler(filters=Filters.text, callback=add_item_price_callback)
+            MessageHandler(filters=Filters.text, callback=add_item_photo_callback)
+        ],
+        ConversationStates.PHOTO: [
+            MessageHandler(filters=Filters.photo, callback=add_item_price_callback)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]
