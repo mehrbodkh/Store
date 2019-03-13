@@ -12,16 +12,14 @@ def main():
     dp = updater.dispatcher
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conversation_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
+        entry_points=[CommandHandler('start', show_categories, pass_user_data=True)],
 
         states={
-            SORT_TYPE: [RegexHandler(pattern='^(Boy|Girl|Other)$', callback=stores, pass_user_data=True)],
+            ConversationStates.CATEGORY: [MessageHandler(Filters.text, show_products_list, pass_user_data=True)],
+            ConversationStates.PRODUCT: [MessageHandler(Filters.text, show_product, pass_user_data=True)],
+            ConversationStates.PRODUCT_INFO: [MessageHandler(Filters.text, add_to_basket, pass_user_data=True),
+                                              MessageHandler(Filters.text.filter(), add_to_basket, pass_user_data=True)],
 
-            STORE: [MessageHandler(Filters.photo, products), CommandHandler('skip', skip_photo)],
-
-            CATEGORY: [MessageHandler(Filters.location, location), CommandHandler('skip', skip_location)],
-
-            BIO: [MessageHandler(Filters.text, bio)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)]

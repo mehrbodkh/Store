@@ -4,99 +4,128 @@
 
 import logging
 
+import telegram
+from persian import persian
 from telegram import (ReplyKeyboardMarkup, Bot)
 from telegram.ext import *
 
 # Enable logging
+from DB.db_handler import *
 from customer_bot.constants.messages import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 logger = logging.getLogger()
 
-SORT_TYPE, STORE, CATEGORY, PRODUCT, BIO = range(5)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 
-def start(bot, update):
-    reply_keyboard = [[ReplyKeyboards.stores, ReplyKeyboards.products]]
-    update.message.reply_text(BotMessages.start, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
-    return SORT_TYPE
+class ConversationStates:
+    CATEGORY, PRODUCTS_LIST, PRODUCT_INFO, PRODUCT, DESCRIPTION, INVENTORY, TAG = range(7)
+
+
+def get_all_categories():
+    return True
+
+
+def get_all_products_by_category(category):
+    return True
 
 
 # ++++++++++++++++++++++++++ choose store scenario ++++++++++++++++++++++++++++
-def stores(bot, update, user_data):
-    user = update.message.from_user
+def show_categories(bot, update, user_data):
+    categories_list = get_product_categories()
+    user_data[UserData.categories_list] = categories_list
+    # BotMessages.cat_count.format(persian.convert_en_numbers(cat[1]))
+    kb = [(cat[0]) for cat in categories_list]
+    reply_keyboard = [kb]
+    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
+    update.message.reply_text(BotMessages.choose_category, reply_markup=reply_markup)
+    return ConversationStates.CATEGORY
+
+
+def show_products_list(bot, update, user_data):
+    category = update.message.text
+    all_products = get_product_by_category(category)
+    kb = [product.name + Cons.dash + str(product.id) for product in all_products]
+    reply_keyboard = [kb]
+    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
+    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
+    return ConversationStates.PRODUCT
+
+
+def show_product(bot, update, user_data):
+    text_entered = update.message.text
+    product_name, product_id = text_entered.split(Cons.dash)
+    product = get_product_by_id(product_id)
+    user_data[UserData.last_product] = product
+    kb = [[ReplyKeyboards.add_to_basket, ReplyKeyboards.back]]
+    reply_markup = ReplyKeyboardMarkup(keyboard=kb)
+    text = BotMessages.product_info.format(name=product.name, category=product.category, price=product.price,
+                                           inventory=product.inventory, description=product.description)
+    update.message.reply_text(text=text, reply_markup=reply_markup)
+    return ConversationStates.PRODUCT_INFO
+
+
+def add_to_basket(bot, update, user_data):
     store_list = get_store_list()
-    user_data[UserDate.store_list] = store_list
+    product = user_data[UserData.last_product]
+
     store_name_list = get_name_list_from_store(store_list)
     reply_keyboard = [store_name_list]
-    update.message.reply_text(BotMessages.stores, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
-
-    return STORE
-
-
-
-def store_categories(bot, update, user_data):
-    user = update.message.from_user
-    reply_text = update.message.reply_text
-
-    store_list = user_data[UserDate.store_list]
-    categories_list = get_categories_list_from_store(store)
-    reply_keyboard = [categories_list]
-    update.message.reply_text(BotMessages.choose_category, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
-    return CATEGORY
+    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
+    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
+    return ConversationStates.PRODUCT
 
 
-def store_products(bot, update, user_data):
-    user = update.message.from_user
+def show_basket(bot, update, user_data):
     store_list = get_store_list()
-
     store_name_list = get_name_list_from_store(store_list)
     reply_keyboard = [store_name_list]
-    update.message.reply_text(BotMessages.choose_product, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
-    return PRODUCT
+    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
+    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
+    return ConversationStates.PRODUCT
 
 
-# ++++++++++++++++++++++++++ choose sort type ++++++++++++++++++++++++++++
-def products(bot, update):
+def request_location(bot, update, user_data):
+    store_list = get_store_list()
+    store_name_list = get_name_list_from_store(store_list)
+    reply_keyboard = [store_name_list]
+    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
+    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
+    return ConversationStates.PRODUCT
+
+
+def send_order_payment(bot, update, user_data):
+    store_list = get_store_list()
+    store_name_list = get_name_list_from_store(store_list)
+    reply_keyboard = [store_name_list]
+    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
+    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
+    return ConversationStates.PRODUCT
+
+
+def success_receipt_handler(bot, update, user_data):
+    store_list = get_store_list()
+    store_name_list = get_name_list_from_store(store_list)
+    reply_keyboard = [store_name_list]
+    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
+    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
+    return ConversationStates.PRODUCT
+
+
+# ++++++++++++++++++++++++++ cancel ++++++++++++++++++++++++++++
+def cancel(bot, update):
     user = update.message.from_user
-    photo_file = update.message.photo[-1].get_file()
-    photo_file.download('user_photo.jpg')
-    update.message.reply_text('Gorgeous! Now, send me your location please, '
-                              'or send /skip if you don\'t want to.')
-    return CATEGORY
-
-
-def skip_photo(bot, update):
-    user = update.message.from_user
-    update.message.reply_text('I bet you look great! Now, send me your location please, '
-                              'or send /skip.')
-
-    return CATEGORY
-
-
-def location(bot, update):
-    user = update.message.from_user
-    user_location = update.message.location
-    update.message.reply_text('Maybe I can visit you sometime! '
-                              'At last, tell me something about yourself.')
-
-    return BIO
-
-
-def skip_location(bot, update):
-    user = update.message.from_user
-    update.message.reply_text('You seem a bit paranoid! '
-                              'At last, tell me something about yourself.')
-
-    return BIO
-
-
-def bio(bot, update):
-    user = update.message.from_user
-    update.message.reply_text('Thank you! I hope we can talk again some day.')
+    update.message.reply_text('Bye! I hope we can talk again some day.')
 
     return ConversationHandler.END
+
+
+def error(bot, update, error_ex):
+    """Log Errors caused by Updates."""
+    print(error_ex)
+    logger.warning('Update "%s" caused error "%s"', update, update.message)
 
 
 def cancel(bot, update):

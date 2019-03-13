@@ -98,6 +98,6 @@ def get_product_categories():
     categories = [category[0] for category in categories]
     result = []
     for category in categories:
-        product_amount = session.query(Product).filter(Product.category == category).count()
-        result.append((category, product_amount))
+        product_count = session.query(Product).filter(Product.category == category).count()
+        result.append((category, product_count))
     return result
