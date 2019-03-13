@@ -65,7 +65,15 @@ def send_product(bot, update, product):
     bot.send_photo(
         chat_id=update.message.chat_id,
         photo=product.photo,
-        caption=str(product.name + "\n" + product.description + "\n" + "[انتخاب](send:" + str(product.id) + ")")
+        caption=str(
+            "نام محصول: " + product.name +
+            "\n" +
+            "توضیحات:‌ " + product.description +
+            "\n" +
+            "قیمت:‌ " + str(product.price) + " ریال" +
+            "\n" +
+            "[حذف محصول](send:" + str(product.id) + ")"
+        )
     )
 
 
