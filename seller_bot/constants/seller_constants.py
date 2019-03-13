@@ -5,6 +5,7 @@ class Messages:
 
     add_item_name_tutorial = "لطفا نام محصول خود را وارد کنید:"
     add_item_price_tutorial = "لطفا قیمت محصول خود را وارد کنید:"
+    add_item_photo_tutorial = "لطفا تصویر محصول را ارسال کنید:"
 
 
 class Keyboards:
