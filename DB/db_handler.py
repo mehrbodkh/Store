@@ -79,15 +79,23 @@ def add_store_product(store_id, name, category, price, inventory, photo, descrip
 
 
 def get_product_by_id(product_id):
-    return session.query(Product).filter(Product.id == product_id).one_or_none()
+    return session.query(Product).filter(Product.id == product_id, Product.inventory.isnot(0),
+                                         Product.inventory.isnot(None)).one_or_none()
 
 
-def get_product_by_category(category):
-    return session.query(Product).filter(Product.category == category).all()
+def get_products_by_category(category):
+    return session.query(Product).filter(Product.category == category, Product.inventory != 0,
+                                         Product.inventory.isnot(None)).all()
 
 
-def get_product_by_store_id(store_id):
-    return session.query(Product).filter(Product.store_id == store_id).all()
+def get_products_by_store_id(store_id):
+    return session.query(Product).filter(Product.store_id == store_id, Product.inventory != 0,
+                                         Product.inventory.isnot(None)).all()
+
+
+def find_products_by_name(name):
+    return session.query(Product).filter(Product.name.like("%" + name + "%"), Product.inventory != 0,
+                                         Product.inventory.isnot(None)).all()
 
 
 @db_persist
@@ -97,7 +105,8 @@ def set_product_inventory(product_id, inventory):
 
 
 def get_product_categories():
-    categories = session.query(distinct(Product.category)).all()
+    categories = session.query(distinct(Product.category)).filter(Product.inventory != 0,
+                                                                  Product.inventory is not None).all()
     categories = [category[0] for category in categories]
     result = []
     for category in categories:

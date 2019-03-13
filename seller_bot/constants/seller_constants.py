@@ -23,4 +23,4 @@ class Keyboards:
 
 
 class ConversationStates:
-    NAME, PRICE, PHOTO, DESCRIPTION, INVENTORY, TAG = range(6)
+    NAME, PRICE, PHOTO, DESCRIPTION, INVENTORY, TAG, DELETE_PRODUCT_ID = range(7)
