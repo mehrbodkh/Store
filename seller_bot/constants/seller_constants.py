@@ -16,12 +16,17 @@ class Messages:
     remove_item_not_found = "محصول مورد نظر در لیست محصولات فروشگاه شما موجود نمی‌باشد."
     remove_item_deleted = "محصول مورد نظر با موفقیت از لیست محصولات حذف شد."
 
+    change_store_card_tutorial = "شماره کارت فروشگاه خود را وارد کنید:"
+    change_store_card_success = "شماره کارت فروشگاه شما با موفقیت تنظیم شد."
+    change_store_card_fail = "شماره کارت شما باید ۱۶ رقمی باشد."
+
 
 class Keyboards:
     add_item = "افزودن محصول"
     remove_item = "حذف کردن محصول"
     show_all_items = "نمایش تمام محصولات"
+    change_store_card_number = "تنظیم شماره کارت فروشگاه"
 
 
 class ConversationStates:
-    NAME, PRICE, PHOTO, DESCRIPTION, INVENTORY, TAG, DELETE_PRODUCT_ID = range(7)
+    NAME, PRICE, PHOTO, DESCRIPTION, INVENTORY, TAG, DELETE_PRODUCT_ID, CARD_NUMBER = range(8)
