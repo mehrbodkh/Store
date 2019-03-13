@@ -25,6 +25,12 @@ def start_manager(bot, update):
     start_managing_tour(bot, update)
 
 
+def help_manager(bot, update):
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.help_message
+    )
+
 def start_managing_tour(bot, update):
     reply_keyboard = [[
         Keyboards.add_item,
@@ -59,6 +65,8 @@ show_all_items_message_handler = RegexHandler(
     pattern='^(' + Keyboards.show_all_items + ')$',
     callback=show_all_products_callback
 )
+
+help_command_handler = CommandHandler("help", help_manager)
 
 add_item_conversation_handler = ConversationHandler(
     entry_points=[RegexHandler(
