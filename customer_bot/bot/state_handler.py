@@ -18,7 +18,7 @@ def main():
             ConversationStates.CATEGORY: [MessageHandler(Filters.text, show_products_list, pass_user_data=True)],
             ConversationStates.PRODUCT: [MessageHandler(Filters.text, show_product, pass_user_data=True)],
             ConversationStates.PRODUCT_INFO: [MessageHandler(Filters.text, add_to_basket, pass_user_data=True),
-                                              MessageHandler(Filters.text.filter(), add_to_basket, pass_user_data=True)],
+                                              MessageHandler(Filters.text, add_to_basket, pass_user_data=True)],
 
         },
 

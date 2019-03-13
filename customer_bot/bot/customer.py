@@ -67,10 +67,18 @@ def show_product(bot, update, user_data):
     return ConversationStates.PRODUCT_INFO
 
 
+def is_un_payed_order():
+    pass
+
+
 def add_to_basket(bot, update, user_data):
     store_list = get_store_list()
+    chat_id = update.message.chat_id
     product = user_data[UserData.last_product]
-
+    if is_un_payed_order():
+        add_order_product()
+    else:
+        add_order(customer_chat_id=chat_id, address_id=product.address.id, description=product.description)
     store_name_list = get_name_list_from_store(store_list)
     reply_keyboard = [store_name_list]
     reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)

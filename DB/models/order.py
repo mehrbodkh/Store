@@ -5,7 +5,7 @@ from DB.models.base import Base
 
 
 class Order(Base):
-    __tablename__ = "stores"
+    __tablename__ = "orders"
     id = Column(Integer, primary_key=True)
     customer_chat_id = Column(Integer)
     address_id = Column(Integer, ForeignKey("address.id"))
