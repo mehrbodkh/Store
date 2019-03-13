@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger()
 
-SORT_TYPE, STORE, CATEGORY, BIO = range(4)
+SORT_TYPE, STORE, CATEGORY, PRODUCT, BIO = range(5)
 
 
 def start(bot, update):
@@ -24,9 +24,10 @@ def start(bot, update):
 
 
 # ++++++++++++++++++++++++++ choose store scenario ++++++++++++++++++++++++++++
-def stores(bot, update):
+def stores(bot, update, user_data):
     user = update.message.from_user
     store_list = get_store_list()
+    user_data[UserDate.store_list] = store_list
     store_name_list = get_name_list_from_store(store_list)
     reply_keyboard = [store_name_list]
     update.message.reply_text(BotMessages.stores, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
@@ -34,24 +35,26 @@ def stores(bot, update):
     return STORE
 
 
-def product_category_by_store(bot, update, user_date):
+
+def store_categories(bot, update, user_data):
     user = update.message.from_user
-    store_list = get_store_list()
-    user_date[store_list] = store_list
-    store_name_list = get_name_list_from_store(store_list)
-    reply_keyboard = [store_name_list]
+    reply_text = update.message.reply_text
+
+    store_list = user_data[UserDate.store_list]
+    categories_list = get_categories_list_from_store(store)
+    reply_keyboard = [categories_list]
     update.message.reply_text(BotMessages.choose_category, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
     return CATEGORY
 
 
-def product_category_by_store(bot, update, user_date):
+def store_products(bot, update, user_data):
     user = update.message.from_user
     store_list = get_store_list()
 
     store_name_list = get_name_list_from_store(store_list)
     reply_keyboard = [store_name_list]
-    update.message.reply_text(BotMessages.choose_category, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
-    return CATEGORY
+    update.message.reply_text(BotMessages.choose_product, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
+    return PRODUCT
 
 
 # ++++++++++++++++++++++++++ choose sort type ++++++++++++++++++++++++++++

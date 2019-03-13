@@ -1,4 +1,5 @@
 class BotMessages:
+    choose_product = "محصول خود را انتخاب نمایید:"
     choose_category = "دسته محصول خود را انتخاب نمایید:"
     stores = "فروشگاه مورد نظر را انتخاب نمایید:"
     help = "راهنما"
@@ -10,6 +11,11 @@ class BotMessages:
 class ReplyKeyboards:
     products = "محصولات"
     stores = "فروشگاه ها"
+
+
+class UserDate:
+    store = "store"
+    store_list = "store_list"
 
 
 class LogMessages:
@@ -33,4 +39,11 @@ def get_name_list_from_store(store_list):
     name_list = []
     for i in store_list:
         name_list.append(i.name)
+    return name_list
+
+
+def get_categories_list_from_store(store):
+    name_list = []
+    for i in store:
+        name_list.append(i.category)
     return name_list
