@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger()
 
-SORT_TYPE, PHOTO, LOCATION, BIO = range(4)
+SORT_TYPE, STORE, CATEGORY, BIO = range(4)
 
 
 def start(bot, update):
@@ -24,12 +24,16 @@ def start(bot, update):
     return SORT_TYPE
 
 
+
+
 def stores(bot, update):
     logger.info("in stores")
     user = update.message.from_user
+    store_list = get_store_list()
+    reply_keyboard = [store_list]
     logger.info("Gender of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('I see! Please send me a photo of yourself, '
-                              'so I know what you look like, or send /skip if you don\'t want to.')
+    update.message.reply_text(BotMessages.stores, reply_markup=ReplyKeyboardMarkup(keyboard=reply_keyboard))
+
     return STORE
 
 
@@ -39,7 +43,7 @@ def product_category_by_store(bot, update):
     logger.info("Gender of %s: %s", user.first_name, update.message.text)
     update.message.reply_text('I see! Please send me a photo of yourself, '
                               'so I know what you look like, or send /skip if you don\'t want to.')
-    return STORE
+    return CATEGORY
 
 
 def products(bot, update):
@@ -50,7 +54,7 @@ def products(bot, update):
     logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
     update.message.reply_text('Gorgeous! Now, send me your location please, '
                               'or send /skip if you don\'t want to.')
-    return LOCATION
+    return CATEGORY
 
 
 def skip_photo(bot, update):
@@ -59,7 +63,7 @@ def skip_photo(bot, update):
     update.message.reply_text('I bet you look great! Now, send me your location please, '
                               'or send /skip.')
 
-    return LOCATION
+    return CATEGORY
 
 
 def location(bot, update):
