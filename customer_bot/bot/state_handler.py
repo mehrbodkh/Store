@@ -10,19 +10,16 @@ def main():
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
-
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conversation_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
 
         states={
-            SORT_TYPE: [RegexHandler(pattern='^(Boy|Girl|Other)$', callback=stores)],
+            SORT_TYPE: [RegexHandler(pattern='^(Boy|Girl|Other)$', callback=stores, pass_user_data=True)],
 
-            STORE: [MessageHandler(Filters.photo, products),
-                    CommandHandler('skip', skip_photo)],
+            STORE: [MessageHandler(Filters.photo, products), CommandHandler('skip', skip_photo)],
 
-            CATEGORY: [MessageHandler(Filters.location, location),
-                       CommandHandler('skip', skip_location)],
+            CATEGORY: [MessageHandler(Filters.location, location), CommandHandler('skip', skip_location)],
 
             BIO: [MessageHandler(Filters.text, bio)]
         },

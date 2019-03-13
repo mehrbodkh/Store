@@ -1,4 +1,5 @@
 class BotMessages:
+    choose_category = "دسته محصول خود را انتخاب نمایید:"
     stores = "فروشگاه مورد نظر را انتخاب نمایید:"
     help = "راهنما"
     line = "\n"
@@ -29,6 +30,7 @@ def get_store_list():
 
 
 def get_name_list_from_store(store_list):
-    name_list=[]
+    name_list = []
     for i in store_list:
-        pass
+        name_list.append(i.name)
+    return name_list
