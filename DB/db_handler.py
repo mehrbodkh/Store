@@ -79,7 +79,7 @@ def add_store_product(store_id, name, category, price, inventory, photo, descrip
 
 
 def get_product_by_id(product_id):
-    return session.query(Product).filter(Product.id == product_id, Product.inventory.isnot(0),
+    return session.query(Product).filter(Product.id == product_id, Product.inventory != 0,
                                          Product.inventory.isnot(None)).one_or_none()
 
 
