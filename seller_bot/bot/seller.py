@@ -74,10 +74,11 @@ add_item_conversation_handler = ConversationHandler(
 )
 
 remove_item_conversation_handler = ConversationHandler(
-    entry_points=[RegexHandler(pattern='^(' + Keyboards.remove_item + ')$', callback=remove_item_enter_name)],
+    entry_points=[RegexHandler(pattern='^(' + Keyboards.remove_item + ')$', callback=remove_item_enter_name,
+                               pass_user_data=True)],
     states={
         ConversationStates.NAME: [
-            MessageHandler(filters=Filters.text, callback=remove_item_name_callback)
+            MessageHandler(filters=Filters.text, callback=remove_item_name_callback, pass_user_data=True)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]

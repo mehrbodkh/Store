@@ -13,6 +13,8 @@ class Messages:
     add_item_inventory_tutorial = "تعداد باقیمانده‌ی محصول را وارد نمایید:"
 
     remove_item_name_tutorial = "نام محصول مورد نظر را وارد کنید:"
+    remove_item_not_found = "محصول مورد نظر در لیست محصولات فروشگاه شما موجود نمی‌باشد."
+    remove_item_deleted = "محصول مورد نظر با موفقیت از لیست محصولات حذف شد."
 
 
 class Keyboards:

@@ -2,7 +2,7 @@ from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
 
 from seller_bot.constants.seller_constants import *
-from seller_bot.mocks import tags_list
+from seller_bot.mocks import tags_list, products_list
 
 
 def add_item_enter_name(bot, update, user_data):
@@ -46,6 +46,9 @@ def add_item_tag_callback(bot, update, user_data):
 
 def add_item_inventory_callback(bot, update, user_data):
     user_data["item_inventory"] = update.message.text
+    # todo update db
+
+    add_item_to_db(user_data["item_name"])
 
     bot.send_message(
         chat_id=update.message.chat_id,
@@ -101,3 +104,7 @@ def send_inventory_message(bot, update):
         text=Messages.add_item_inventory_tutorial
     )
     return ConversationStates.INVENTORY
+
+
+def add_item_to_db(text):
+    products_list.append(text)
