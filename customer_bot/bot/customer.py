@@ -51,9 +51,19 @@ def show_product(bot, update, user_data):
     user_data[UserData.count] = 1
     kb = [[ReplyKeyboards.add_product_to_order, ReplyKeyboards.back]]
     reply_markup = ReplyKeyboardMarkup(keyboard=kb)
-    text = BotMessages.product_info.format(name=product.name, category=product.category, price=product.price,
-                                           inventory=product.inventory, description=product.description)
-    update.message.reply_text(text=text, reply_markup=reply_markup)
+    text = BotMessages.product_info.format(
+        name=product.name,
+        category=product.category,
+        price=product.price,
+        inventory=product.inventory,
+        description=product.description
+    )
+    bot.send_photo(
+        chat_id=update.message.chat_id,
+        photo=product.photo,
+        caption=text,
+        reply_markup=reply_markup
+    )
     return ConversationStates.PRODUCT_INFO
 
 
