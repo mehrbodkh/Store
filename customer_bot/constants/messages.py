@@ -1,16 +1,18 @@
 class BotMessages:
+    enter_or_choose_product_count = "تعداد مورد نیاز را انتخاب یا وارد نمایید."
     title = "پیام پرداخت"
     total_price = "\n" \
                   "جمع کل :‌{} ریال"
     send_location = "موقعیت خود را از روی نقشه ارسال نمایید."
     product_list = "*لیست محصولات* :\n"
-    products_in_order = "*-{index}* {name} *{price}* {count}\n"
+    products_in_order = "*{index}-* {name} قیمت واحد *{price}* تعداد {count}\n"
     success_add_product_to_order = "محصول با موفقیت به سبد خرید شما اضافه شد."
     product_info = "نام محصول: *{name}*\n" \
                    "دسته: *{category}*\n" \
                    "قیمت: *{price}*\n" \
                    "تعداد موجود: *{inventory}*\n" \
-                   "توضیحات: *{description}*\n"
+                   "توضیحات: *{description}*\n" \
+                   "تعداد مورد نیاز برای افزودن به سبد خرید را انتخاب یا وارد نمایید."
     cat_count = " ({})"
     choose_product = "محصول مورد نظر خود را انتخاب نمایید:"
     choose_category = "به فروشگاه من خوش‌ آمدید.\nبرای شروع خرید یکی از دسته‌بندی‌های زیر را انتخاب کنید:"
@@ -26,6 +28,9 @@ class Cons:
 
 
 class ReplyKeyboards:
+    one = "1"
+    two = "2"
+    three = "3"
     next = "مرحله بعد"
     pay = "پرداخت"
     finish_order_and_pay = "تکمیل خرید و پرداخت"

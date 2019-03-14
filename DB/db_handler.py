@@ -63,6 +63,7 @@ def add_store(name, owner_chat_id, bank_card_number, photo=None, description=Non
 def get_store(store_id):
     return session.query(Store).filter(Store.id == store_id).one_or_none()
 
+
 # add_store("shop", 1188642847, "6037997440875665")
 
 @db_persist
@@ -135,7 +136,7 @@ def get_product_categories():
 
 @db_persist
 def add_order(customer_chat_id, address_id, description):
-    order = Order(customer_chat_id, address_id, description, False)
+    order = Order(customer_chat_id, address_id, description, True)
     session.add(order)
 
 
@@ -193,6 +194,10 @@ def get_current_order_products(order_id):
 
 def get_all_not_sent_orders():
     return session.query(Order).filter(Order.shown_order == False).all()
+
+
+def get_product_by_name(product_name):
+    return session.query(Product).filter(Product.name == product_name).first()
 
 
 @db_persist
