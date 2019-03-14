@@ -56,12 +56,23 @@ def get_user_addresses(chat_id):
 @db_persist
 def add_store(name, owner_chat_id, bank_card_number, photo=None, description=None):
     store = Store(name=name, owner_chat_id=owner_chat_id, bank_card_number=bank_card_number, photo=photo,
-                  description=description)
+                  description=description, remaining_times=20)
     session.add(store)
 
 
 def get_store(store_id):
     return session.query(Store).filter(Store.id == store_id).one_or_none()
+
+
+@db_persist
+def change_remaining_times(store_id, remaining_times):
+    store = get_store(store_id)
+    store.remaining_times = remaining_times
+
+
+def get_remaining_times(store_id):
+    store = get_store(store_id)
+    return store.remaining_times
 
 
 @db_persist
