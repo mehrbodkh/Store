@@ -60,6 +60,10 @@ def add_store(name, owner_chat_id, bank_card_number, photo=None, description=Non
     session.add(store)
 
 
+def get_store(store_id):
+    return session.query(Store).filter(Store.id == store_id).one_or_none()
+
+
 @db_persist
 def change_remaining_times(store_id, remaining_times):
     store = get_store(store_id)
@@ -69,10 +73,6 @@ def change_remaining_times(store_id, remaining_times):
 def get_remaining_times(store_id):
     store = get_store(store_id)
     return store.remaining_times
-
-
-def get_store(store_id):
-    return session.query(Store).filter(Store.id == store_id).one_or_none()
 
 
 @db_persist

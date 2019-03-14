@@ -1,7 +1,7 @@
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, LabeledPrice
 from telegram.ext import ConversationHandler
 
-from DB.db_handler import add_store_product
+from DB.db_handler import add_store_product, get_remaining_times, change_remaining_times
 from DB.db_handler import get_product_categories
 from seller_bot.constants.seller_constants import *
 
@@ -89,9 +89,13 @@ def send_price_message(bot, update):
 
 
 def send_name_message(bot, update):
+    if get_remaining_items() <= 0:
+        return send_remaining_items_finished(bot, update)
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_name_tutorial
+        text=Messages.add_item_name_tutorial +
+        "\n" +
+        "تعداد دفعات باقی‌مانده برای اضافه کردن محصول: " + str(get_remaining_items())
     )
     return ConversationStates.NAME
 
@@ -115,11 +119,31 @@ def send_inventory_message(bot, update):
     return ConversationStates.INVENTORY
 
 
+def send_remaining_items_finished(bot, update):
+    bot.send_invoice(
+        chat_id=update.message.chat_id,
+        title=Messages.charge_remaining_times_title,
+        description=Messages.charge_remaining_times_description,
+        payload="payload",
+        provider_token="6037997368026085",
+        start_parameter="",
+        currency="IRR",
+        prices=[LabeledPrice('افزایش تعداد محصولات به تعداد ۲۰ عدد', 10000)]
+    )
+    change_remaining_times(1, 20)
+    return ConversationHandler.END
+
+
 def add_item_to_db(name, tag, price, inventory, photo, description):
     add_store_product(1, name, tag, price, inventory, photo, description)
+    change_remaining_times(1, get_remaining_items() - 1)
 
 
 def get_tags_list_from_db():
     categories_list = get_product_categories()
     keyboard = [(cat[0]) for cat in categories_list]
     return keyboard
+
+
+def get_remaining_items():
+    return get_remaining_times(1)
