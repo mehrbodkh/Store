@@ -63,6 +63,7 @@ def add_store(name, owner_chat_id, bank_card_number, photo=None, description=Non
 def get_store(store_id):
     return session.query(Store).filter(Store.id == store_id).one_or_none()
 
+# add_store("shop", 1188642847, "6037997440875665")
 
 @db_persist
 def change_remaining_times(store_id, remaining_times):
@@ -134,7 +135,7 @@ def get_product_categories():
 
 @db_persist
 def add_order(customer_chat_id, address_id, description):
-    order = Order(customer_chat_id, address_id, description)
+    order = Order(customer_chat_id, address_id, description, False)
     session.add(order)
 
 
@@ -188,3 +189,13 @@ def get_customer_current_order(customer_chat_id):
 
 def get_current_order_products(order_id):
     return session.query(OrderProduct).filter(OrderProduct.order_id == order_id).all()
+
+
+def get_all_not_sent_orders():
+    return session.query(Order).filter(Order.shown_order == False).all()
+
+
+@db_persist
+def set_order_shown_order(order_id, shown_order):
+    order = get_order_by_id(order_id)
+    order.shown_order = shown_order
