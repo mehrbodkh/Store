@@ -14,7 +14,7 @@ services:
     ports:
       - "5443:5432"
   bot_store_customer:
-    image: docker.bale.ai/money/bot_store_customer:0.3-6
+    image: docker.bale.ai/money/bot_store_customer:0.4-7
     container_name: bot_store_customer
     environment:
       #   PostgreSQL Config

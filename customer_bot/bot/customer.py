@@ -136,15 +136,16 @@ def send_order_payment(bot, update, user_data):
 
 
 def success_receipt_handler(bot, update, user_data):
-    logger.info(success_receipt_handler.__name__)
-    successful_payment = update.message.successful_payment
-    invoice_payload = json.loads(successful_payment.invoice_payload)
-    msg_uid = invoice_payload.get('msgUID').split('-' + invoice_payload.get('msgDate'))[0]
-    order = get_order_by_msg_uid(msg_uid)
-    add_payment(order_id=order.id, amount=successful_payment.total_amount, msg_uid=msg_uid,
-                traceNo=invoice_payload.get('traceNo'))
-    set_order_shown_order(order.id, False)
-    bot.send_message(chat_id=order.customer_chat_id, text=BotMessages.success_payment)
+    if update.message.chat_id == 11:
+        logger.info(success_receipt_handler.__name__)
+        successful_payment = update.message.successful_payment
+        invoice_payload = json.loads(successful_payment.invoice_payload)
+        msg_uid = invoice_payload.get('msgUID').split('-' + invoice_payload.get('msgDate'))[0]
+        order = get_order_by_msg_uid(msg_uid)
+        add_payment(order_id=order.id, amount=successful_payment.total_amount, msg_uid=msg_uid,
+                    traceNo=invoice_payload.get('traceNo'))
+        set_order_shown_order(order.id, False)
+        bot.send_message(chat_id=order.customer_chat_id, text=BotMessages.success_payment)
     return ConversationHandler.END
 
 
