@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
 import json
 
 import persian
-from telegram import (ReplyKeyboardMarkup, LabeledPrice)
+from telegram import (ReplyKeyboardMarkup, LabeledPrice, Message)
 from telegram.ext import *
 
 # Enable logging
@@ -114,24 +115,28 @@ def send_order_payment(bot, update, user_data):
     current_order = get_customer_current_order(customer_chat_id=chat_id)
     set_order_address(order_id=current_order.id, lat=user_location.latitude, lng=user_location.longitude)
     order_products = get_current_order_products(current_order.id)
+    bank_card_number = ""
     for order_product in order_products:
+        bank_card_number = order_product.product.store.bank_card_number
         new_inventory = order_product.product.inventory - order_product.count
         set_product_inventory(product_id=order_product.product.id, inventory=new_inventory)
 
     total_price = user_data[UserData.total_price]
     invoice_resp = bot.send_invoice(chat_id=update.message.chat_id, title=BotMessages.title,
                                     description="😊 😊 😊 😊 😊 😊",
-                                    payload="payload", provider_token=BotConfig.bank_card_number, start_parameter="",
+                                    payload="payload", provider_token=bank_card_number,
+                                    start_parameter="",
                                     currency="IRR",
                                     prices=[LabeledPrice('قیمت کل', total_price)])
-    set_order_invoice(current_order.id, invoice_resp.message_id)
+    # set_order_invoice(current_order.id, str(invoice_resp.message_id)+'-'+str(int(invoice_resp.date.timestamp())))
+    set_order_invoice(current_order.id, str(invoice_resp.message_id))
     return ConversationHandler.END
 
 
 def success_receipt_handler(bot, update, user_data):
     successful_payment = update.message.successful_payment
     invoice_payload = json.loads(successful_payment.invoice_payload)
-    msg_uid = invoice_payload.get('msg_uid').split('-')[0]
+    msg_uid = invoice_payload.get('msgUID').split('-'+invoice_payload.get('msgDate'))[0]
     order = get_order_by_msg_uid(msg_uid)
     set_order_shown_order(order.id, False)
     return ConversationHandler.END

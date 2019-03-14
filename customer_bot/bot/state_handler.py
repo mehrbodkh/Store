@@ -18,7 +18,7 @@ def main():
 
     conversation_handler = ConversationHandler(
         entry_points=[CommandHandler('start', show_categories, pass_user_data=True),
-                      MessageHandler(Filters.successful_payment, success_receipt_handler)],
+                      MessageHandler(Filters.successful_payment, success_receipt_handler, pass_user_data=True)],
 
         states={
             ConversationStates.CATEGORY: CH + [MessageHandler(Filters.text, show_products_list, pass_user_data=True)],
