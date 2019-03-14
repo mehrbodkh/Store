@@ -92,6 +92,12 @@ add_item_conversation_handler = ConversationHandler(
         ],
         ConversationStates.INVENTORY: [
             MessageHandler(filters=Filters.text, callback=add_item_inventory_callback, pass_user_data=True)
+        ],
+        ConversationStates.PAYMENT: [
+            MessageHandler(
+                filters=Filters.successful_payment,
+                callback=successful_payment_callback,
+                pass_user_data=True)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]

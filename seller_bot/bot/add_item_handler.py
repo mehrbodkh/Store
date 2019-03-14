@@ -1,3 +1,4 @@
+from persian import persian
 from telegram import ReplyKeyboardMarkup, LabeledPrice
 from telegram.ext import ConversationHandler
 
@@ -39,6 +40,11 @@ def add_item_description_callback(bot, update, user_data):
 def add_item_tag_callback(bot, update, user_data):
     user_data["item_tag"] = update.message.text
     return send_inventory_message(bot, update)
+
+
+def successful_payment_callback(bot, update, user_data):
+    change_remaining_times(1, 20)
+    return ConversationHandler.END
 
 
 def add_item_inventory_callback(bot, update, user_data):
@@ -95,7 +101,7 @@ def send_name_message(bot, update):
         chat_id=update.message.chat_id,
         text=Messages.add_item_name_tutorial +
         "\n" +
-        "تعداد دفعات باقی‌مانده برای اضافه کردن محصول: " + str(get_remaining_items())
+        "تعداد دفعات باقی‌مانده برای اضافه کردن محصول: " + str(persian.convert_en_numbers(get_remaining_items()))
     )
     return ConversationStates.NAME
 
@@ -130,8 +136,7 @@ def send_remaining_items_finished(bot, update):
         currency="IRR",
         prices=[LabeledPrice('افزایش تعداد محصولات به تعداد ۲۰ عدد', 10000)]
     )
-    change_remaining_times(1, 20)
-    return ConversationHandler.END
+    return ConversationStates.PAYMENT
 
 
 def add_item_to_db(name, tag, price, inventory, photo, description):
