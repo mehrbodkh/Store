@@ -7,6 +7,7 @@ from telegram.ext import *
 
 from seller_bot.bot.add_item_handler import *
 from seller_bot.bot.change_card_number_handler import change_card_number_enter, change_card_number_callback
+from seller_bot.bot.orders_handler import orders_button_callback
 from seller_bot.bot.remove_item_handler import *
 from seller_bot.bot.show_all_products_handler import show_all_products_callback
 from seller_bot.constants.seller_constants import *
@@ -37,7 +38,8 @@ def start_managing_tour(bot, update):
         Keyboards.add_item,
         Keyboards.remove_item,
         Keyboards.show_all_items,
-        Keyboards.change_store_card_number
+        Keyboards.change_store_card_number,
+        Keyboards.get_orders_list
     ]]
     bot.send_message(
         chat_id=update.message.chat_id,
@@ -65,6 +67,11 @@ start_command_handler = CommandHandler("start", start_manager)
 show_all_items_message_handler = RegexHandler(
     pattern='^(' + Keyboards.show_all_items + ')$',
     callback=show_all_products_callback
+)
+
+get_orders_message_handler = RegexHandler(
+    pattern='^(' + Keyboards.get_orders_list + ')$',
+    callback=orders_button_callback
 )
 
 help_command_handler = CommandHandler("help", help_manager)
