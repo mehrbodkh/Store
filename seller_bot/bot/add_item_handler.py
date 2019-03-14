@@ -44,6 +44,11 @@ def add_item_tag_callback(bot, update, user_data):
 
 def successful_payment_callback(bot, update, user_data):
     change_remaining_times(1, 20)
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=Messages.payment_done,
+        reply_markup=ReplyKeyboardMarkup(keyboard=[[Keyboards.return_to_main_menu]])
+    )
     return ConversationHandler.END
 
 

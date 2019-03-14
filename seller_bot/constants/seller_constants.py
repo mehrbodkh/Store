@@ -34,6 +34,7 @@ class Messages:
 
     charge_remaining_times_title = "افزایش تعداد دفعات افزودن"
     charge_remaining_times_description = "افزودن ۲۰ عدد تعداد دفعات باقی‌مانده اضافه کردن محصول"
+    payment_done = "تعداد دفعات افزودن محصول با موفقیت شارژ شد."
 
 
 class Keyboards:
