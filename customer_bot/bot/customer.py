@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
+import json
 
-
-from telegram import (ReplyKeyboardMarkup, LabeledPrice)
+import persian
+from telegram import (ReplyKeyboardMarkup, LabeledPrice, Message)
 from telegram.ext import *
 
 # Enable logging
@@ -14,11 +16,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger()
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
-
 
 class ConversationStates:
-    CATEGORY, LOCATION, PRODUCT_INFO, PRODUCT, CONFIRM_ORDER, PRODUCT_ADDED_TO_ORDER, PAYMENT = range(7)
+    CATEGORY, LOCATION, PRODUCT_INFO, PRODUCT, CONFIRM_ORDER, PRODUCT_ADDED_TO_ORDER, PAYMENT, PRODUCT_COUNT = range(8)
 
 
 # ++++++++++++++++++++++++++ choose store scenario ++++++++++++++++++++++++++++
@@ -36,7 +36,7 @@ def show_categories(bot, update, user_data):
 def show_products_list(bot, update, user_data):
     category = update.message.text
     all_products = get_products_by_category(category)
-    kb = [product.name + Cons.dash + str(product.id) for product in all_products]
+    kb = [product.name for product in all_products]
     reply_keyboard = [kb]
     reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
     update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
@@ -45,19 +45,17 @@ def show_products_list(bot, update, user_data):
 
 def show_product(bot, update, user_data):
     text_entered = update.message.text
-    product_name, product_id = text_entered.split(Cons.dash)
-    product = get_product_by_id(product_id)
+    product = get_product_by_name(text_entered)
     user_data[UserData.last_product] = product
-    user_data[UserData.count] = 1
-    kb = [[ReplyKeyboards.add_product_to_order, ReplyKeyboards.back]]
+    kb = [[ReplyKeyboards.one, ReplyKeyboards.two, ReplyKeyboards.three, ReplyKeyboards.back]]
     reply_markup = ReplyKeyboardMarkup(keyboard=kb)
-    text = BotMessages.product_info.format(
+    text = persian.convert_en_numbers(BotMessages.product_info.format(
         name=product.name,
         category=product.category,
         price=product.price,
         inventory=product.inventory,
         description=product.description
-    )
+    ))
     bot.send_photo(
         chat_id=update.message.chat_id,
         photo=product.photo,
@@ -68,16 +66,16 @@ def show_product(bot, update, user_data):
 
 
 def add_product_to_order(bot, update, user_data):
+    text_entered = update.message.text
+    product_count = persian.convert_ar_numbers(text_entered)
     chat_id = update.message.chat_id
     product = user_data[UserData.last_product]
-    count = user_data[UserData.count]
-    if not count:
-        count = 1
     current_order = get_customer_current_order(customer_chat_id=chat_id)
     if not current_order:
         add_order(customer_chat_id=chat_id, address_id=None, description=product.description)
         current_order = get_customer_current_order(customer_chat_id=chat_id)
-    add_order_product(order_id=current_order.id, product_id=product.id, count=count, price_per_one=product.price)
+    add_order_product(order_id=current_order.id, product_id=product.id, count=product_count,
+                      price_per_one=product.price)
     reply_keyboard = [[ReplyKeyboards.back, ReplyKeyboards.finish_order_and_pay]]
     reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
     update.message.reply_text(BotMessages.success_add_product_to_order, reply_markup=reply_markup)
@@ -95,10 +93,10 @@ def show_order_products(bot, update, user_data):
     total_price = 0
     for order_product in order_products:
         total_price += order_product.price_per_one * order_product.count
-        text = BotMessages.products_in_order.format(index=index, name=order_product.product.name,
-                                                    count=order_product.count, price=order_product.price_per_one)
+        text += persian.convert_en_numbers(BotMessages.products_in_order.format(
+            index=index, name=order_product.product.name, count=order_product.count, price=order_product.price_per_one))
         index += 1
-    text += BotMessages.total_price.format(total_price)
+    text += BotMessages.total_price.format(persian.convert_en_numbers(total_price))
     user_data[UserData.total_price] = total_price
     update.message.reply_text(text=text, reply_markup=reply_markup)
     return ConversationStates.CONFIRM_ORDER
@@ -116,37 +114,35 @@ def send_order_payment(bot, update, user_data):
     user_location = update.message.location
     current_order = get_customer_current_order(customer_chat_id=chat_id)
     set_order_address(order_id=current_order.id, lat=user_location.latitude, lng=user_location.longitude)
+    order_products = get_current_order_products(current_order.id)
+    bank_card_number = ""
+    for order_product in order_products:
+        bank_card_number = order_product.product.store.bank_card_number
+        new_inventory = order_product.product.inventory - order_product.count
+        set_product_inventory(product_id=order_product.product.id, inventory=new_inventory)
 
     total_price = user_data[UserData.total_price]
-    bot.send_invoice(chat_id=update.message.chat_id, title=BotMessages.title, description="😊 😊 😊 😊 😊 😊",
-                     payload="payload", provider_token=BotConfig.bank_card_number, start_parameter="", currency="IRR",
-                     prices=[LabeledPrice('قیمت کل', total_price)])
-    return ConversationStates.PAYMENT
-
-
-def success_receipt_handler(bot, update, user_data):
-    store_list = get_store_list()
-    store_name_list = get_name_list_from_store(store_list)
-    reply_keyboard = [store_name_list]
-    reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
-    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
-    return ConversationStates.PRODUCT
-
-
-# ++++++++++++++++++++++++++ cancel ++++++++++++++++++++++++++++
-def cancel(bot, update):
-    user = update.message.from_user
-    update.message.reply_text('Bye! I hope we can talk again some day.')
-
+    invoice_resp = bot.send_invoice(chat_id=update.message.chat_id, title=BotMessages.title,
+                                    description="😊 😊 😊 😊 😊 😊",
+                                    payload="payload", provider_token=bank_card_number,
+                                    start_parameter="",
+                                    currency="IRR",
+                                    prices=[LabeledPrice('قیمت کل', total_price)])
+    # set_order_invoice(current_order.id, str(invoice_resp.message_id)+'-'+str(int(invoice_resp.date.timestamp())))
+    set_order_invoice(current_order.id, str(invoice_resp.message_id))
     return ConversationHandler.END
 
 
-def error(bot, update, error_ex):
-    """Log Errors caused by Updates."""
-    print(error_ex)
-    logger.warning('Update "%s" caused error "%s"', update, update.message)
+def success_receipt_handler(bot, update, user_data):
+    successful_payment = update.message.successful_payment
+    invoice_payload = json.loads(successful_payment.invoice_payload)
+    msg_uid = invoice_payload.get('msgUID').split('-'+invoice_payload.get('msgDate'))[0]
+    order = get_order_by_msg_uid(msg_uid)
+    set_order_shown_order(order.id, False)
+    return ConversationHandler.END
 
 
+# ++++++++++++++++++++++++++ cancel ++++++++++++++++++++++++++++
 def cancel(bot, update):
     user = update.message.from_user
     update.message.reply_text('Bye! I hope we can talk again some day.')
