@@ -20,7 +20,7 @@ def send_order_message(bot, update, order):
         longitude=order.address.longitude
     )
     for order_product in order.order_products:
-        text = text + "\n-" + str(order_product.product.name)
+        text = text + "\n- " + str(order_product.product.name) + ": " + str(order_product.count)
     bot.send_message(
         chat_id=update.message.chat_id,
         text=text

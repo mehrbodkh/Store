@@ -13,7 +13,7 @@ def main():
 
     dp = updater.dispatcher
     back_handler = RegexHandler(pattern='^(' + Keyboards.back + ')$', callback=show_categories, pass_user_data=True)
-    start_handler = CommandHandler('start', show_categories, pass_user_data=True),
+    start_handler = CommandHandler('start', show_categories, pass_user_data=True)
     receipt_success_handler = MessageHandler(Filters.successful_payment, success_receipt_handler, pass_user_data=True)
     common_handlers = [start_handler, back_handler]
 

@@ -3,7 +3,7 @@
 import json
 
 import persian
-from telegram import (ReplyKeyboardMarkup, LabeledPrice)
+from telegram import (ReplyKeyboardMarkup, LabeledPrice, SuccessfulPayment)
 from telegram.ext import *
 
 # Enable logging
@@ -36,7 +36,7 @@ def show_products_list(bot, update, user_data):
     kb = [product.name for product in all_products]
     reply_keyboard = [kb]
     reply_markup = ReplyKeyboardMarkup(keyboard=reply_keyboard)
-    update.message.show_product(BotMessages.choose_product, reply_markup=reply_markup)
+    update.message.reply_text(BotMessages.choose_product, reply_markup=reply_markup)
     return ConversationStates.PRODUCT
 
 
@@ -139,9 +139,12 @@ def success_receipt_handler(bot, update, user_data):
     logger.info(success_receipt_handler.__name__)
     successful_payment = update.message.successful_payment
     invoice_payload = json.loads(successful_payment.invoice_payload)
-    msg_uid = invoice_payload.get('msgUID').split('-'+invoice_payload.get('msgDate'))[0]
+    msg_uid = invoice_payload.get('msgUID').split('-' + invoice_payload.get('msgDate'))[0]
     order = get_order_by_msg_uid(msg_uid)
+    add_payment(order_id=order.id, amount=successful_payment.total_amount, msg_uid=msg_uid,
+                traceNo=invoice_payload.get('traceNo'))
     set_order_shown_order(order.id, False)
+    bot.send_message(chat_id=order.customer_chat_id, text=BotMessages.success_payment)
     return ConversationHandler.END
 
 
