@@ -1,9 +1,10 @@
 class BotMessages:
-    enter_or_choose_product_count = "تعداد مورد نیاز را انتخاب یا وارد نمایید."
+    success_payment = "سفارش شما با موفقیت پرداخت شد."
+    enter_or_choose_product_count = "تعداد مورد نیاز را انتخاب یا وارد کنید."
     title = "پیام پرداخت"
     total_price = "\n" \
                   "جمع کل :‌{} ریال"
-    send_location = "موقعیت خود را از روی نقشه ارسال نمایید."
+    send_location = "موقعیت خود را از روی نقشه ارسال کنید."
     product_list = "*لیست محصولات* :\n"
     products_in_order = "*{index}-* {name} قیمت واحد *{price}* تعداد {count}\n"
     success_add_product_to_order = "محصول با موفقیت به سبد خرید شما اضافه شد."
@@ -12,22 +13,18 @@ class BotMessages:
                    "قیمت: *{price}*\n" \
                    "تعداد موجود: *{inventory}*\n" \
                    "توضیحات: *{description}*\n" \
-                   "تعداد مورد نیاز برای افزودن به سبد خرید را انتخاب یا وارد نمایید."
+                   "تعداد مورد نیاز برای افزودن به *سبد خرید* را انتخاب یا وارد کنید."
     cat_count = " ({})"
-    choose_product = "محصول مورد نظر خود را انتخاب نمایید:"
+    choose_product = "محصول مورد نظر خود را انتخاب کنید:"
     choose_category = "به فروشگاه من خوش‌ آمدید.\nبرای شروع خرید یکی از دسته‌بندی‌های زیر را انتخاب کنید:"
-    stores = "فروشگاه مورد نظر را انتخاب نمایید:"
+    stores = "فروشگاه مورد نظر را انتخاب کنید:"
     help = "راهنما"
     line = "\n"
     choose_from_buttons = "لطفا از بین گزینه ها انتخاب کنید:"
-    start = "سلام به بات فروشگاه خوش آمدید😊😊\nلطفا از بین گزینه ها انتخاب کنید: 👇👇"
+    start = "سلام به بات فروشگاه خوش آمدید.\nلطفا از بین گزینه ها انتخاب کنید:"
 
 
-class Cons:
-    dash = "-"
-
-
-class ReplyKeyboards:
+class Keyboards:
     one = "1"
     two = "2"
     three = "3"
@@ -49,32 +46,5 @@ class UserData:
     store_list = "store_list"
 
 
-class LogMessages:
-    pass
-
-
-class Store:
-    def __init__(self, id, name, address):
-        self.id = id
-        self.name = name
-        self.address = address
-
-
-def get_store_list():
-    store_list = [Store(1, "ممد آقا", "خیابان شریعتی جنب پارک"),
-                  Store(2, "حسن دست کج", "خیابان آزادی جنب میوه فروشی")]
-    return store_list
-
-
-def get_name_list_from_store(store_list):
-    name_list = []
-    for i in store_list:
-        name_list.append(i.name)
-    return name_list
-
-
-def get_categories_list_from_store(store):
-    name_list = []
-    for i in store:
-        name_list.append(i.category)
-    return name_list
+class ConversationStates:
+    CATEGORY, LOCATION, PRODUCT_INFO, PRODUCT, CONFIRM_ORDER, PRODUCT_ADDED_TO_ORDER, PAYMENT, PRODUCT_COUNT = range(8)
