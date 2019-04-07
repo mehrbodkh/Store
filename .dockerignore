@@ -1,0 +1,9 @@
+venv/
+.dockerfile
+.gitignore
+
+
+bot/log*
+
+bot/report_files
+/files
