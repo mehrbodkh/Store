@@ -1,7 +1,7 @@
 version: '3.0'
 services:
   pg_store:
-    image: docker.bale.ai/bot/balepostgres:1.6.0
+    image: docker.bale.ai/controller/balepostgres:1.6.0
     container_name: pg_store
     restart: always
     environment:

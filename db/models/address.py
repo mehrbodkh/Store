@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from DB.models.base import Base
+from db.models.base import Base
 
 
 class Address(Base):

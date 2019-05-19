@@ -4,6 +4,7 @@ from local_config import LocalConfig
 
 
 class BotConfig:
+    poll_interval = float(os.environ.get('POLL_INTERVAL', 1))
     base_file_url = os.environ.get('BASE_FILE_URL', "https://tapi.bale.ai/file/")
     base_url = os.environ.get('BASE_URL', "https://tapi.bale.ai/")
     bank_card_number = int(os.environ.get('BANK_CARD_NUMBER', "6037997473091040"))
@@ -14,3 +15,12 @@ class BotConfig:
     web_hook_url = "{}{}".format(web_hook_domain, web_hook_path)
     customer_token = os.environ.get('CUSTOMER_TOKEN', LocalConfig.customer_token)
     seller_token = os.environ.get('SELLER_TOKEN', LocalConfig.seller_token)
+
+
+class DatabaseConfig:
+    db_user = os.getenv('POSTGRES_USER', "postgres")
+    db_password = os.getenv('POSTGRES_PASSWORD', "123")
+    db_host = os.getenv('POSTGRES_HOST', "localhost")
+    db_name = os.getenv('POSTGRES_DB', "store_db")
+    db_port = os.getenv('POSTGRES_PORT', "5432")
+    database_url = "postgresql://{}:{}@{}:{}/{}".format(db_user, db_password, db_host, db_port, db_name) or None

@@ -1,7 +1,15 @@
-class Messages:
-    start_conversation = "سلام!\nبه بازوی مدیریت فروشگاه خود خوش آمدید.\nبا استفاده از این بازو می‌توانید اجناس داخل " \
+class Message:
+    not_valid_card_number = "فرمت کارت بانکی اشتباه است!"
+    input_error = "ورودی صحیح *نمی باشد!*"
+    send_photo = "*عکس* فروشگاه را بارگزاری نمایید:"
+    enter_store_address = "*آدرس* فروشگاه خود را وارد کنید:"
+    enter_store_card_number = "*شماره کارت بانکی* خود را وارد کنید:"
+    enter_store_name = "*نام* فروشگاه را وارد کنید:"
+    no_products = "فعلا هیچ محصولی موجود نیست!"
+    start_conversation = "سلام!\nبه بازوی مدیریت فروشگاه خود خوش آمدید.\n" \
+                         "با استفاده از این بازو می‌توانید اجناس داخل " \
                          "فروشگاه خود را به آدرس @BazovanStore_Bot مدیریت کنید. "
-    start_conversation_tour = "برای مدیریت اجناس فروشگاه یکی از گزینه‌های زیر را انتخاب کنید:"
+    choose_menu = "برای مدیریت اجناس فروشگاه یکی از گزینه‌های زیر را انتخاب کنید:"
     end_add_conversation = "محصول شما با موفقیت به فروشگاه اضافه شد."
 
     add_item_name_tutorial = "نام محصول خود را وارد کنید:"
@@ -36,6 +44,11 @@ class Messages:
     charge_remaining_times_title = "افزایش تعداد دفعات افزودن"
     charge_remaining_times_description = "افزودن ۲۰ عدد تعداد دفعات باقی‌مانده اضافه کردن محصول"
     payment_done = "تعداد دفعات افزودن محصول با موفقیت شارژ شد."
+    product_caption = "نام محصول: {name}" \
+                      "\n" \
+                      "توضیحات:‌ {description}" \
+                      "\n" \
+                      "قیمت: {price} ریال"
 
 
 class Keyboards:
@@ -48,4 +61,4 @@ class Keyboards:
 
 
 class ConversationStates:
-    NAME, PRICE, PHOTO, DESCRIPTION, INVENTORY, TAG, DELETE_PRODUCT_ID, CARD_NUMBER, PAYMENT = range(9)
+    NAME, PRICE, PHOTO, DESCRIPTION, INVENTORY, TAG, DELETE_PRODUCT_ID, CARD_NUMBER, PAYMENT, ADDRESS = range(10)

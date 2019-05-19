@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship, backref
 
-from DB.models.base import Base
+from db.models.base import Base
 
 
 class Store(Base):
@@ -11,16 +11,14 @@ class Store(Base):
     owner_chat_id = Column(Integer)
     bank_card_number = Column(String(16))
     photo = Column(String)
+    description = Column(Text)
     address_id = Column(Integer, ForeignKey("address.id"))
     address = relationship("Address")
     products = relationship("Product")
-    description = Column(Text)
-    remaining_times = Column(Integer)
 
-    def __init__(self, name, owner_chat_id, bank_card_number, photo, description, remaining_times):
+    def __init__(self, name, owner_chat_id, bank_card_number, photo, description):
         self.name = name
         self.owner_chat_id = owner_chat_id
         self.bank_card_number = bank_card_number
         self.photo = photo
         self.description = description
-        self.remaining_times = remaining_times

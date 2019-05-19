@@ -2,32 +2,20 @@ import logging
 
 from sqlalchemy import distinct
 
-from DB.models.address import Address
-from DB.models.base import Session, Base, engine
-from DB.models.order import Order
-from DB.models.order_payment import Payment
-from DB.models.order_product import OrderProduct
-from DB.models.product import Product
-from DB.models.store import Store
-from DB.models.user import User
-from DB.models.user_address import UserAddress
+from db.db_persist import db_persist
+from db.models.address import Address
+from db.models.base import Session, Base, engine
+from db.models.order import Order
+from db.models.order_payment import Payment
+from db.models.order_product import OrderProduct
+from db.models.product import Product
+from db.models.store import Store
+from db.models.user import User
+from db.models.user_address import UserAddress
 
 Base.metadata.create_all(engine)
 session = Session()
 logger = logging.getLogger()
-
-
-def db_persist(func):
-    def persist(*args, **kwds):
-        func(*args, **kwds)
-        try:
-            session.commit()
-        except Exception as e:
-            logger.error(e)
-            session.rollback()
-            return None
-
-    return persist
 
 
 @db_persist
@@ -56,7 +44,7 @@ def get_user_addresses(chat_id):
 @db_persist
 def add_store(name, owner_chat_id, bank_card_number, photo=None, description=None):
     store = Store(name=name, owner_chat_id=owner_chat_id, bank_card_number=bank_card_number, photo=photo,
-                  description=description, remaining_times=20)
+                  description=description)
     session.add(store)
 
 
@@ -107,7 +95,7 @@ def get_products_by_category(category):
                                          Product.inventory.isnot(None)).all()
 
 
-def get_products_by_store_id(store_id):
+def select_store_products(store_id):
     return session.query(Product).filter(Product.store_id == store_id, Product.inventory != 0,
                                          Product.inventory.isnot(None)).all()
 

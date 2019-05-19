@@ -1,8 +1,8 @@
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-from DB.db_handler import get_products_by_store_id, set_product_inventory, find_products_by_name
-from seller_bot.constants.seller_constants import Messages, ConversationStates, Keyboards
+from db.db_handler import set_product_inventory, find_products_by_name
+from seller_bot.constants.seller_constants import Message, ConversationStates, Keyboards
 
 
 def remove_item_enter_name(bot, update, user_data):
@@ -24,7 +24,7 @@ def remove_item_product_callback(bot, update, user_data):
 def send_name_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.remove_item_name_tutorial
+        text=Message.remove_item_name_tutorial
     )
     return ConversationStates.NAME
 
@@ -32,7 +32,7 @@ def send_name_message(bot, update):
 def send_deleted_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.remove_item_deleted,
+        text=Message.remove_item_deleted,
         reply_markup=ReplyKeyboardMarkup(keyboard=[[Keyboards.return_to_main_menu]])
     )
     return ConversationHandler.END
@@ -41,7 +41,7 @@ def send_deleted_message(bot, update):
 def send_not_found_message(bot, update, user_data):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.remove_item_not_found
+        text=Message.remove_item_not_found
     )
     return remove_item_enter_name(bot, update, user_data)
 

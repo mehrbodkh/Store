@@ -1,4 +1,4 @@
-from DB.db_handler import get_all_not_sent_orders
+from db.db_handler import get_all_not_sent_orders
 
 
 def orders_button_callback(bot, update):

@@ -1,4 +1,4 @@
-class BotMessages:
+class Message:
     success_payment = "سفارش شما با موفقیت پرداخت شد."
     enter_or_choose_product_count = "تعداد مورد نیاز را انتخاب یا وارد کنید."
     title = "پیام پرداخت"

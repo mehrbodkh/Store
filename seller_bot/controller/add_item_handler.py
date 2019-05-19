@@ -2,8 +2,8 @@ from persian import persian
 from telegram import ReplyKeyboardMarkup, LabeledPrice
 from telegram.ext import ConversationHandler
 
-from DB.db_handler import add_store_product, get_remaining_times, change_remaining_times
-from DB.db_handler import get_product_categories
+from db.db_handler import add_store_product, get_remaining_times, change_remaining_times
+from db.db_handler import get_product_categories
 from seller_bot.constants.seller_constants import *
 
 
@@ -46,7 +46,7 @@ def successful_payment_callback(bot, update, user_data):
     change_remaining_times(1, 20)
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.payment_done,
+        text=Message.payment_done,
         reply_markup=ReplyKeyboardMarkup(keyboard=[[Keyboards.return_to_main_menu]])
     )
     return ConversationHandler.END
@@ -67,7 +67,7 @@ def add_item_inventory_callback(bot, update, user_data):
 
         bot.send_message(
             chat_id=update.message.chat_id,
-            text=Messages.end_add_conversation,
+            text=Message.end_add_conversation,
             reply_markup=ReplyKeyboardMarkup(keyboard=[[Keyboards.return_to_main_menu]])
         )
         return ConversationHandler.END
@@ -78,7 +78,7 @@ def add_item_inventory_callback(bot, update, user_data):
 def send_description_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_description_tutorial
+        text=Message.add_item_description_tutorial
     )
     return ConversationStates.DESCRIPTION
 
@@ -86,7 +86,7 @@ def send_description_message(bot, update):
 def send_photo_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_photo_tutorial
+        text=Message.add_item_photo_tutorial
     )
     return ConversationStates.PHOTO
 
@@ -94,20 +94,13 @@ def send_photo_message(bot, update):
 def send_price_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_price_tutorial
+        text=Message.add_item_price_tutorial
     )
     return ConversationStates.PRICE
 
 
 def send_name_message(bot, update):
-    if get_remaining_items() <= 0:
-        return send_remaining_items_finished(bot, update)
-    bot.send_message(
-        chat_id=update.message.chat_id,
-        text=Messages.add_item_name_tutorial +
-        "\n" +
-        "تعداد دفعات باقی‌مانده برای اضافه کردن محصول: " + str(persian.convert_en_numbers(get_remaining_items()))
-    )
+    update.message.reply_text(Message.add_item_name_tutorial)
     return ConversationStates.NAME
 
 
@@ -116,7 +109,7 @@ def send_tag_message(bot, update):
 
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_tag_tutorial,
+        text=Message.add_item_tag_tutorial,
         reply_markup=ReplyKeyboardMarkup(keyboard=[kb])
     )
     return ConversationStates.TAG
@@ -125,7 +118,7 @@ def send_tag_message(bot, update):
 def send_inventory_message(bot, update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text=Messages.add_item_inventory_tutorial
+        text=Message.add_item_inventory_tutorial
     )
     return ConversationStates.INVENTORY
 
@@ -133,8 +126,8 @@ def send_inventory_message(bot, update):
 def send_remaining_items_finished(bot, update):
     bot.send_invoice(
         chat_id=update.message.chat_id,
-        title=Messages.charge_remaining_times_title,
-        description=Messages.charge_remaining_times_description,
+        title=Message.charge_remaining_times_title,
+        description=Message.charge_remaining_times_description,
         payload="payload",
         provider_token="6037997368026085",
         start_parameter="",
