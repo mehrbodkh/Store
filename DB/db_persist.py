@@ -1,6 +1,13 @@
-from sqlalchemy.exc import SQLAlchemyError
+import logging
 
-from db.db_handler import session, logger
+from sqlalchemy.exc import SQLAlchemyError
+from db.models.base import Session
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+session = Session()
 
 
 def db_persist(func):
@@ -8,10 +15,11 @@ def db_persist(func):
         try:
             res = func(*args, **kwargs)
             session.commit()
-            logger.info("success calling db func: " + func.__name__)
+            logger.info("SUCCESS: " + func.__name__)
             return res
         except SQLAlchemyError as e:
-            logger.error(e.args)
+            logger.error("FAILURE: " + func.__name__)
+            logger.error(e)
             session.rollback()
             return False
 

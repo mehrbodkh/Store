@@ -1,7 +1,7 @@
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-from db.db_handler import add_store
+from db.db_handler import add_store_product
 from seller_bot.constants.seller_constants import Message, ConversationStates
 
 
@@ -53,6 +53,10 @@ def add_store_photo_callback(bot, update, user_data):
     except:
         update.message.reply_text(Message.not_valid_photo)
         return send_photo_message(bot, update)
+
+
+def add_store_to_db(name, owner_chat_id, bank_card_number, photo, description):
+    add_store(name, owner_chat_id, bank_card_number, photo, description)
 
 
 def send_description_message(bot, update):
@@ -130,10 +134,6 @@ def send_remaining_stores_finished(bot, update):
         prices=[LabeledPrice('افزایش تعداد محصولات به تعداد ۲۰ عدد', 10000)]
     )
     return ConversationStates.PAYMENT
-
-
-def add_store_to_db(name, owner_chat_id, bank_card_number, photo, description):
-    add_store(name, owner_chat_id, bank_card_number, photo, description)
 
 
 def get_tags_list_from_db():

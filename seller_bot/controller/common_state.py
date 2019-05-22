@@ -3,10 +3,10 @@ import logging
 from telegram.ext import ConversationHandler
 
 from seller_bot.constants.keyboards import Keyboard
-from seller_bot.constants.seller_constants import Message
+from seller_bot.constants.seller_constants import Message, Keyboards
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,10 @@ def main_menu(bot, update):
 def start_manager(bot, update):
     update.message.reply_text(Message.start_conversation)
     update.message.reply_text(Message.choose_menu, reply_markup=Keyboard.main_menu)
+
+
+def edit_store(bot, update):
+    update.message.reply_text(Message.choose_menu, reply_markup=Keyboard.edit_store_menu)
 
 
 def help_manager(bot, update):

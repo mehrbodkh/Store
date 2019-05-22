@@ -1,8 +1,12 @@
 class Message:
+    success_edit_store_address = "آدرس فروشگاه شما با موفقیت تنظیم شد."
+    enter_store_address = "*آدرس* فروشگاه خود را وارد کنید:"
+    success_edit_store_description = "توضیحات فروشگاه شما با موفقیت تنظیم شد."
+    enter_store_description = "*توضیحات* فروشگاه را وارد کنید:"
+    success_edit_store_name = "نام فروشگاه شما با موفقیت تنظیم شد."
     not_valid_card_number = "فرمت کارت بانکی اشتباه است!"
     input_error = "ورودی صحیح *نمی باشد!*"
     send_photo = "*عکس* فروشگاه را بارگزاری نمایید:"
-    enter_store_address = "*آدرس* فروشگاه خود را وارد کنید:"
     enter_store_card_number = "*شماره کارت بانکی* خود را وارد کنید:"
     enter_store_name = "*نام* فروشگاه را وارد کنید:"
     no_products = "فعلا هیچ محصولی موجود نیست!"
@@ -25,9 +29,9 @@ class Message:
     remove_item_not_found = "محصول مورد نظر در لیست محصولات فروشگاه شما موجود نمی‌باشد."
     remove_item_deleted = "محصول مورد نظر با موفقیت از لیست محصولات حذف شد."
 
-    change_store_card_tutorial = "شماره کارت فروشگاه خود را وارد کنید:"
-    change_store_card_success = "شماره کارت فروشگاه شما با موفقیت تنظیم شد."
-    change_store_card_fail = "شماره کارت شما باید ۱۶ رقمی باشد."
+    edit_store_card_tutorial = "شماره کارت فروشگاه خود را وارد کنید:"
+    edit_store_card_success = "شماره کارت فروشگاه شما با موفقیت تنظیم شد."
+    edit_store_card_fail = "شماره کارت شما باید ۱۶ رقمی باشد."
 
     help_message = "سلام! به بازو مدیریت فروشگاهتان خوش‌آمدید.\nبا استفاده از این بازو می‌توانید فروشگاه خود به آدرس " \
                    "@BazoveanStore_Bot را مدیریت کنید.\n\n-با انتخاب گزینه‌ی [افزودن محصول](send:افزودن محصول) " \
@@ -52,10 +56,16 @@ class Message:
 
 
 class Keyboards:
+    back_to_main_menu = "بازگشت به منو اصلی"
+    back = "بازگشت"
     add_item = "افزودن محصول"
     remove_item = "حذف کردن محصول"
     show_all_items = "نمایش تمام محصولات"
-    change_store_card_number = "تنظیم شماره کارت فروشگاه"
+    edit_store_card_number = "تنظیم شماره کارت فروشگاه"
+    edit_store_name = "تنظیم نام فروشگاه"
+    edit_store_address = "تنظیم آدرس فروشگاه"
+    edit_store_description = "تنظیم توضیحات فروشگاه"
+    edit_store = "تنظیمات فروشگاه"
     get_orders_list = "لیست سفارش‌ها"
     return_to_main_menu = "/start"
 

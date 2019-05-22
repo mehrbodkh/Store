@@ -4,6 +4,10 @@ from local_config import LocalConfig
 
 
 class BotConfig:
+    store_description = os.environ.get('STORE_DESCRIPTION', "توضیحات")
+    store_card_number = os.environ.get('STORE_CARD_NUMBER', "6037997473091040")
+    store_owner_chat_id = int(os.environ.get('STORE_OWNER_CHAT_ID', 201707397))
+    store_name = os.environ.get('STORE_NAME', "فروشگاه")
     poll_interval = float(os.environ.get('POLL_INTERVAL', 1))
     base_file_url = os.environ.get('BASE_FILE_URL', "https://tapi.bale.ai/file/")
     base_url = os.environ.get('BASE_URL', "https://tapi.bale.ai/")
@@ -24,3 +28,7 @@ class DatabaseConfig:
     db_name = os.getenv('POSTGRES_DB', "store_db")
     db_port = os.getenv('POSTGRES_PORT', "5432")
     database_url = "postgresql://{}:{}@{}:{}/{}".format(db_user, db_password, db_host, db_port, db_name) or None
+
+
+class StoreConfig:
+    name = os.environ.get('BASE_FILE_URL', "https://tapi.bale.ai/file/")

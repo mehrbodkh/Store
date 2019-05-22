@@ -6,8 +6,11 @@ import logging
 from telegram.ext import *
 
 from seller_bot.controller.add_item_handler import *
-from seller_bot.controller.change_card_number_handler import change_card_number_enter, change_card_number_callback
-from seller_bot.controller.common_state import start_manager, help_manager, error
+from seller_bot.controller.edit_store_address_handler import edit_store_address, edit_store_address_callback
+from seller_bot.controller.edit_store_card_number_handler import edit_store_card_number, edit_store_card_number_callback
+from seller_bot.controller.common_state import start_manager, help_manager, error, edit_store
+from seller_bot.controller.edit_store_description_handler import edit_store_description, edit_store_description_callback
+from seller_bot.controller.edit_store_name_handler import edit_store_name, edit_store_name_callback
 from seller_bot.controller.orders_handler import orders_button_callback
 from seller_bot.controller.remove_item_handler import *
 from seller_bot.controller.show_all_products_handler import show_all_products_callback
@@ -28,6 +31,11 @@ show_all_items_message_handler = RegexHandler(
 get_orders_message_handler = RegexHandler(
     pattern='^(' + Keyboards.get_orders_list + ')$',
     callback=orders_button_callback
+)
+
+edit_store_handler = RegexHandler(
+    pattern='^(' + Keyboards.edit_store + ')$',
+    callback=edit_store
 )
 
 help_command_handler = CommandHandler("help", help_manager)
@@ -80,14 +88,53 @@ remove_item_conversation_handler = ConversationHandler(
     fallbacks=[CommandHandler("cancel", error)]
 )
 
-change_store_card_conversation_handler = ConversationHandler(
+edit_store_name_conversation_handler = ConversationHandler(
     entry_points=[RegexHandler(
-        pattern='^(' + Keyboards.change_store_card_number + ')$',
-        callback=change_card_number_enter,
+        pattern='^(' + Keyboards.edit_store_name + ')$',
+        callback=edit_store_name,
+        pass_user_data=True)],
+    states={
+        ConversationStates.NAME: [
+            MessageHandler(filters=Filters.text, callback=edit_store_name_callback, pass_user_data=True)
+        ]
+    },
+    fallbacks=[CommandHandler("cancel", error)]
+)
+
+edit_store_card_conversation_handler = ConversationHandler(
+    entry_points=[RegexHandler(
+        pattern='^(' + Keyboards.edit_store_card_number + ')$',
+        callback=edit_store_card_number,
         pass_user_data=True)],
     states={
         ConversationStates.CARD_NUMBER: [
-            MessageHandler(filters=Filters.text, callback=change_card_number_callback, pass_user_data=True)
+            MessageHandler(filters=Filters.text, callback=edit_store_card_number_callback, pass_user_data=True)
+        ]
+    },
+    fallbacks=[CommandHandler("cancel", error)]
+)
+
+edit_store_address_conversation_handler = ConversationHandler(
+    entry_points=[RegexHandler(
+        pattern='^(' + Keyboards.edit_store_address + ')$',
+        callback=edit_store_address,
+        pass_user_data=True)],
+    states={
+        ConversationStates.ADDRESS: [
+            MessageHandler(filters=Filters.text, callback=edit_store_address_callback, pass_user_data=True)
+        ]
+    },
+    fallbacks=[CommandHandler("cancel", error)]
+)
+
+edit_store_description_conversation_handler = ConversationHandler(
+    entry_points=[RegexHandler(
+        pattern='^(' + Keyboards.edit_store_description + ')$',
+        callback=edit_store_description,
+        pass_user_data=True)],
+    states={
+        ConversationStates.DESCRIPTION: [
+            MessageHandler(filters=Filters.text, callback=edit_store_description_callback, pass_user_data=True)
         ]
     },
     fallbacks=[CommandHandler("cancel", error)]

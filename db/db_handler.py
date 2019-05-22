@@ -42,10 +42,8 @@ def get_user_addresses(chat_id):
 
 
 @db_persist
-def add_store(name, owner_chat_id, bank_card_number, photo=None, description=None):
-    store = Store(name=name, owner_chat_id=owner_chat_id, bank_card_number=bank_card_number, photo=photo,
-                  description=description)
-    session.add(store)
+def insert_to_table(new_object):
+    session.add(new_object)
 
 
 def get_store(store_id):
@@ -71,6 +69,19 @@ def set_store_address(store_id, lat, lng):
     session.add(address)
     store = get_store(store_id)
     store.address = address
+
+
+@db_persist
+def set_store_name(store_id, name):
+    store = get_store(store_id)
+    if store:
+        store.name = name
+
+
+@db_persist
+def set_store_description(store_id, description):
+    store = get_store(store_id)
+    store.description = description
 
 
 @db_persist
